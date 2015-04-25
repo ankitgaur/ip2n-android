@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="2dp"
+    android:orientation="horizontal">
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/timeline_bg" />
+
+
+
+</LinearLayout><!-- From: file:/C:/Users/kritika_pathak/AndroidStudioProjects/NigeriaPldge/app/src/main/res/layout-sw360dp-xhdpi/timeline_listview_header.xml -->

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/timeline_bg"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/list_view_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/header_layout"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_alignParentTop="true"
+            android:background="@color/nigeria_green"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/feed_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/category_listview_item_bg"
+                android:drawableTop="@drawable/incident_feed_icon"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:text="@string/inicidents_feed_button"
+                android:textColor="@drawable/button_text_selector"
+                android:textSize="20dp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="39dp"
+                android:background="@color/timeline_background_color" />
+
+            <Button
+                android:id="@+id/entertainment_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/category_listview_item_bg"
+                android:drawableTop="@drawable/entertainment_icon"
+                android:gravity="center"
+                android:paddingTop="2dp"
+                android:text="@string/entertainment_button"
+                android:textColor="@drawable/button_text_selector"
+                android:textSize="20dp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="39dp"
+                android:background="@color/timeline_background_color" />
+
+            <Button
+                android:id="@+id/news_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/category_listview_item_bg"
+                android:drawableTop="@drawable/news_icon"
+                android:paddingTop="3dp"
+                android:text="@string/news_button"
+                android:textColor="@drawable/button_text_selector"
+                android:textSize="20dp" />
+
+        </LinearLayout>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/header_layout"
+            android:layout_marginBottom="55dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp">
+
+
+            <ListView
+                android:id="@+id/incident_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:divider="@drawable/timeline_bg"
+                android:dividerHeight="15dp"
+                android:fadeScrollbars="true"
+
+                ></ListView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/nigeria_green"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/profile_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/category_listview_item_bg"
+                android:drawableLeft="@drawable/profile_pic"
+                android:paddingLeft="46dp"
+                android:paddingRight="46dp"
+                android:text="Profile"
+                android:textColor="@drawable/button_text_selector"
+                android:textSize="20dp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="39dp"
+                android:background="#9cc39c" />
+
+            <Button
+                android:id="@+id/report_incident_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/category_listview_item_bg"
+                android:drawableLeft="@drawable/report_icon"
+                android:gravity="center"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="Report Incident"
+                android:textColor="@drawable/button_text_selector"
+                android:textSize="20dp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="39dp"
+                android:background="#9cc39c" />
+
+            <Button
+                android:id="@+id/sign_out_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/category_listview_item_bg"
+                android:drawableLeft="@drawable/logout_icon"
+                android:gravity="center"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:text="Sign Out"
+                android:textColor="@drawable/button_text_selector"
+                android:textSize="20dp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

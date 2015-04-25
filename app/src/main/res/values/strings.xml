@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Ipledge2Nigeria</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_nigeria_category">NigeriaCategoryActivity</string>
+    <string name="username_hint">Username</string>
+    <string name="pwd_hint">Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="send_report_desc_header">Send us your report and be part of the re-engineering process by simply clicking on the relevant category.</string>
+    <string name="send_report_desc_footer">With statistics we will create an environment for transparency, accountability, re-engineering, re-orientation and re-branding.</string>
+    <string name="title_activity_nigeria_send_report">NigeriaSendReportActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_textview">Title</string>
+    <string name="category_textview">Category</string>
+    <string name="date_textview">Date*</string>
+    <string name="time_textview">Time*</string>
+    <string name="state_textview">State</string>
+    <string name="govt_textview">Local Government</string>
+    <string name="address_textview">Address/Landmark</string>
+    <string name="response_time_textview">Police Response Time</string>
+    <string name="nearest_station_textview">Nearest Police station</string>
+    <string name="submit_button_textview">Submit</string>
+    <string name="inicidents_feed_button">Incident Feed</string>
+    <string name="entertainment_button">Entertainment</string>
+    <string name="news_button">News</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="incidents_instruction_text">Hold and pull down for latest incidents</string>
+    <string name="news_instruction_text">Click on an article to read more.</string>
+
+
+</resources>

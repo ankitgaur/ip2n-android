@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/timeline_bg"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/list_view_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/header_layout"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_alignParentTop="true"
+            android:background="@color/nigeria_green"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/feed_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/category_listview_item_bg"
+                android:drawableTop="@drawable/incident_feed_icon"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:text="@string/inicidents_feed_button"
+                android:textSize="17dp"
+                android:textColor="@drawable/button_text_selector" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="45dp"
+                android:background="@color/timeline_background_color" />
+
+            <Button
+                android:id="@+id/entertainment_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/category_listview_item_bg"
+                android:drawableTop="@drawable/entertainment_icon"
+                android:gravity="center"
+                android:paddingTop="2dp"
+                android:text="@string/entertainment_button"
+                android:textSize="17dp"
+                android:textColor="@drawable/button_text_selector" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="45dp"
+                android:background="@color/timeline_background_color" />
+
+            <Button
+                android:id="@+id/news_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/category_listview_item_bg"
+                android:drawableTop="@drawable/news_icon"
+                android:paddingTop="1dp"
+                android:text="@string/news_button"
+                android:textSize="17dp"
+                android:textColor="@drawable/button_text_selector" />
+
+        </LinearLayout>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/header_layout"
+            android:layout_marginBottom="55dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp">
+
+
+            <ListView
+                android:id="@+id/incident_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:divider="@drawable/timeline_bg"
+                android:dividerHeight="15dp"
+                android:fadeScrollbars="true"
+
+                ></ListView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/nigeria_green"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/profile_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/category_listview_item_bg"
+                android:drawableLeft="@drawable/profile_pic"
+                android:paddingLeft="14dp"
+                android:paddingRight="4dp"
+                android:text="Profile"
+                android:textSize="17dp"
+                android:textColor="@drawable/button_text_selector" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="39dp"
+                android:background="#9cc39c" />
+
+            <Button
+                android:id="@+id/report_incident_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/category_listview_item_bg"
+                android:drawableLeft="@drawable/report_icon"
+                android:gravity="center"
+                android:text="Report Incident"
+                android:textSize="17dp"
+                android:textColor="@drawable/button_text_selector" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="39dp"
+                android:background="#9cc39c" />
+
+            <Button
+                android:id="@+id/sign_out_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/category_listview_item_bg"
+                android:drawableLeft="@drawable/logout_icon"
+                android:gravity="center"
+                android:paddingLeft="8dp"
+                android:paddingRight="5dp"
+                android:text="Sign Out"
+                android:textSize="17dp"
+                android:textColor="@drawable/button_text_selector" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout><!-- From: file:/C:/Users/kritika_pathak/AndroidStudioProjects/NigeriaPldge/app/src/main/res/layout-sw360dp-xhdpi/activity_nigeria_timeline.xml -->

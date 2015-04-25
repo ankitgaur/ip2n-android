@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipe_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListView
+        android:id="@+id/incident_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#9cc39c"
+        android:divider="@color/timeline_background_color"
+        android:dividerHeight="15dp"
+        android:fadeScrollbars="true"
+
+        ></ListView>
+
+</android.support.v4.widget.SwipeRefreshLayout><!-- From: file:/C:/Users/kritika_pathak/AndroidStudioProjects/NigeriaPldge/app/src/main/res/layout-sw360dp-xhdpi/nigeria_timeline_listview.xml -->

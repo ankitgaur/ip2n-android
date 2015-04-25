@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/instruction_popup_view">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/popup_bg_img"
+        android:orientation="horizontal"
+        android:padding="10dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/show_image_textview"
+        android:gravity="center"
+        android:padding="7dp"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="@color/nigeria_green"/>
+
+    <Button
+        android:id="@+id/browse_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_bg_selector"
+        android:textColor="@drawable/button_text_selector"
+        android:layout_below="@+id/show_image_textview"
+        android:layout_alignParentLeft="true"
+        android:padding="2dp"
+        android:text="Ok,Browse"/>
+        <Button
+            android:id="@+id/no_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@drawable/button_bg_selector"
+            android:textColor="@drawable/button_text_selector"
+            android:layout_alignParentRight="true"
+            android:padding="2dp"
+            android:layout_below="@+id/show_image_textview"
+            android:text="No"/>
+    </RelativeLayout>
+
+</LinearLayout><!-- From: file:/C:/Users/kritika_pathak/AndroidStudioProjects/NigeriaPldge/app/src/main/res/layout-sw360dp-xhdpi/instruction_popup_window.xml -->

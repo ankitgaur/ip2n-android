@@ -1,0 +1,143 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/timeline_bg"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="8dp"
+    tools:context=".NigeriaSendReportActivity">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo"></ImageView>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+         android:layout_height="match_parent"
+        android:layout_below="@+id/logo">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <LinearLayout
+                android:id="@+id/report_textview_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="10dp"
+                android:gravity="left"
+                android:orientation="vertical">
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/date_textview"
+                    android:textColor="@color/black"
+                    android:textSize="22dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:text="@string/time_textview"
+                    android:textColor="@color/black"
+                    android:textSize="22dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:text="Description"
+                    android:textColor="@color/black"
+                    android:textSize="22dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/edit_text_layout"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+
+
+                <EditText
+                    android:id="@+id/dateEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/popup_bg"
+                    android:inputType="date"
+                    android:paddingLeft="5dp"
+                    android:textColor="@color/category_textview_color" />
+
+                <EditText
+                    android:id="@+id/timeEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/popup_bg"
+                    android:inputType="time"
+                    android:paddingLeft="5dp"
+                    android:textColor="@color/category_textview_color" />
+
+                <EditText
+                    android:id="@+id/description_edittext"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/popup_bg"
+                    android:layout_below="@+id/timeEditText"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="60dp"
+                    android:padding="2dp"
+                    android:gravity="left|top"
+                    android:hint="80 character limit"
+                    android:maxLength="80"/>
+
+            </LinearLayout>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/question_view_flipper"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/edit_text_layout"
+                >
+
+0           </android.support.v4.view.ViewPager>
+
+            <Button
+                android:id="@+id/next_button"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_bg_selector"
+                android:text="Next"
+                android:layout_below="@+id/question_view_flipper"
+                android:textColor="@drawable/button_text_selector"
+                android:layout_centerHorizontal="true"
+
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/submit_button"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_bg_selector"
+                android:layout_below="@+id/question_view_flipper"
+                android:text="@string/submit_button_textview"
+                android:textColor="@drawable/button_text_selector"
+                android:visibility="gone"
+                android:layout_centerHorizontal="true"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
+<!-- From: file:/C:/Users/kritika_pathak/AndroidStudioProjects/NigeriaPldge/app/src/main/res/layout-sw360dp-xhdpi/activity_nigeria_report.xml -->

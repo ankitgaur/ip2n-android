@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="category_array">
+        <item>Accidents</item>
+        <item>Bad Roads</item>
+        <item>Floods</item>
+        <item>Motorways</item>
+        <item>Portable Water</item>
+        <item>Schools</item>
+        <item>Airports</item>
+        <item>Crimes</item>
+        <item>Hospitals</item>
+    </array>
+    <array name="category_spinner_array">
+        <item>Accidents</item>
+        <item>Others</item>
+
+    </array>
+</resources>

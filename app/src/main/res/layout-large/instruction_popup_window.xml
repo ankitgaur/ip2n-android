@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/instruction_popup_view">
+    <LinearLayout
+        android:layout_width="450dp"
+        android:layout_height="100dp"
+        android:background="@drawable/popup_bg_img"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingBottom="10dp">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/popup_textview"
+    android:gravity="center"
+    android:padding="10dp"
+    android:textColor="@color/nigeria_green"
+    android:textSize="19dp"/>
+    <Button
+        android:id="@+id/popup_btn"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_bg_selector"
+        android:textColor="@drawable/button_text_selector"
+        android:text="Got it!!!"/>
+    </LinearLayout>
+
+</LinearLayout>

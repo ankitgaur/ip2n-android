@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="nigeria_green">#008000</color>
+    <color name="background_green">#c9ffc9</color>
+    <color name="black">#000000</color>
+    <color name="submit_button_color">#fff5f7</color>
+    <color name="timeline_background_color">#9cc39c</color>
+    <color name="timeline_tabs_textcolor">#e3eae3</color>
+    <color name="spinner_popup_bg_color">#d7ffd7</color>
+    <color name="category_textview_color">#515651</color>
+    <color name="listview_item_focussed">#f6efef</color>
+    <color name="timeline_button_selected">#ff256212</color>
+
+
+</resources>
