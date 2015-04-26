@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -25,9 +24,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.view.ViewPager;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.Log;
@@ -37,27 +34,21 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.android.volley.Response;
 import com.ip2n.mobile.R;
-import com.ip2n.mobile.activities.adapters.IncidentListArrayAdapter;
-import com.ip2n.mobile.activities.adapters.MultipartRequest;
-import com.ip2n.mobile.activities.adapters.NewsAndEntertainmentListArrayAdapter;
 import com.ip2n.mobile.activities.adapters.ViewPagerAdapter;
+import com.ip2n.mobile.activities.dialogs.GovtDialog;
+import com.ip2n.mobile.activities.dialogs.StateDialog;
 import com.ip2n.mobile.models.Question;
-import com.ip2n.mobile.services.EntertainmentService;
+import com.ip2n.mobile.models.State;
 import com.ip2n.mobile.services.IncidentService;
-import com.ip2n.mobile.services.NewsService;
+import com.ip2n.mobile.services.StateService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -71,14 +62,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-
 
 
 public class NigeriaSendReportActivity extends Activity implements LocationListener{
+
+    private static boolean isStateDialogShowing = false;
+    private static boolean isGovtDialogShowing = false;
     private static boolean isDateDialogShowing = false;
     private static boolean isTimeDialogShowing = false;
 
@@ -88,6 +79,8 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
 
     private long id;
 
+    private static EditText stateEditText;
+    private static EditText govtEditText;
     private EditText dateEditText;
     private EditText timeEditText;
     private Calendar myCalendar = Calendar.getInstance();
@@ -102,6 +95,38 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
     private String incidentID = null;
     private LocationManager lManager;
     private Location location;
+
+    public static boolean isIsStateDialogShowing() {
+        return isStateDialogShowing;
+    }
+
+    public static void setIsStateDialogShowing(boolean isStateDialogShowing) {
+        NigeriaSendReportActivity.isStateDialogShowing = isStateDialogShowing;
+    }
+
+    public static boolean isIsGovtDialogShowing() {
+        return isGovtDialogShowing;
+    }
+
+    public static void setIsGovtDialogShowing(boolean isGovtDialogShowing) {
+        NigeriaSendReportActivity.isGovtDialogShowing = isGovtDialogShowing;
+    }
+
+    public static EditText getGovtEditText() {
+        return govtEditText;
+    }
+
+    public static void setGovtEditText(String govt) {
+        govtEditText.setText(govt);
+    }
+
+    public static EditText getStateEditText() {
+        return stateEditText;
+    }
+
+    public static void setStateEditText(String state) {
+        stateEditText.setText(state);
+    }
 
 
     @Override
@@ -207,6 +232,7 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
 
 
     }
+
     private void init() {
         questionsViewPager = (ViewPager) findViewById(R.id.question_view_flipper);
         final ViewPagerAdapter adapter = new ViewPagerAdapter(mContext, questionList);
@@ -219,7 +245,13 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
         if(checkLocationEnabled()){
             Log.i("Kritika","Location : "+getLocation().get(0).getLocality());
             EditText stateEditText = (EditText)findViewById(R.id.stateEditText);
-            stateEditText.setText(getLocation().get(0).getLocality());
+            String state = getLocation().get(0).getAdminArea();
+            do{
+                if(StateService.isFetched() && StateService.getStateByName(state)!=null){
+                    stateEditText.setText(state);
+                }
+            }while(!StateService.isFetched());
+
         }
 
 
@@ -269,7 +301,8 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
             });
 
 
-
+            stateEditText = (EditText) findViewById(R.id.stateEditText);
+            govtEditText = (EditText) findViewById(R.id.govtEditText);
             dateEditText = (EditText) findViewById(R.id.dateEditText);
             timeEditText = (EditText) findViewById(R.id.timeEditText);
 
@@ -343,6 +376,52 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
                 }
             };
 
+            stateEditText.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    if (isStateDialogShowing) {
+                        return false;
+                    }
+
+                    StateDialog sd = new StateDialog(mContext);
+
+                    sd.showOptions(StateService.getStates());
+
+                    return true;
+                }
+
+            });
+
+
+            govtEditText.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    String state = stateEditText.getText().toString();
+                    if (state == null || state.isEmpty()) {
+                        Toast.makeText(mContext, "Please select a valid State!",
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        State st = StateService.getStateByName(state);
+                        if (st == null) {
+                            Toast.makeText(mContext, "Please select a valid State!",
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            GovtDialog gd = new GovtDialog(mContext);
+                            String[] stts = new String[st.getGovts().size()];
+                            st.getGovts().toArray(stts);
+                            gd.showOptions(stts);
+                        }
+
+                    }
+
+                    return true;
+                }
+            });
+
             dateEditText.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -367,6 +446,7 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
                     return true;
                 }
             });
+
             timeEditText.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -418,12 +498,16 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
 
                         String state = "null";
                         String govt = "null";
-                        try {
-                            state = obj.getString("state");
-                            govt = obj.getString("govt");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+
+                        if(stateEditText.getText().toString()!=null && !stateEditText.getText().toString().isEmpty()){
+                            state = stateEditText.getText().toString();
                         }
+
+                        if(govtEditText.getText().toString()!=null && !govtEditText.getText().toString().isEmpty()){
+                            govt = govtEditText.getText().toString();
+                        }
+
+
 
 
                         String description = ((EditText) findViewById(R.id.description_edittext)).getText().toString();
@@ -469,7 +553,6 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
 
         dateEditText.setText(sdf.format(myCalendar.getTime()));
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

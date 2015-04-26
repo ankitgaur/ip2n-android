@@ -75,6 +75,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="35dp"
+                    android:text="Local Govt"
+                    android:textColor="@color/black"
+                    android:textSize="22dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="35dp"
                     android:text="Description"
                     android:textColor="@color/black"
                     android:textSize="22dp" />
@@ -111,6 +118,14 @@
                     android:textColor="@color/category_textview_color" />
                 <EditText
                     android:id="@+id/stateEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/popup_bg"
+                    android:paddingLeft="5dp"
+                    android:textColor="@color/category_textview_color" />
+                <EditText
+                    android:id="@+id/govtEditText"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="10dp"

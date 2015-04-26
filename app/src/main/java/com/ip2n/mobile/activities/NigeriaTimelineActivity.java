@@ -33,6 +33,7 @@ import com.ip2n.mobile.services.EntertainmentService;
 import com.ip2n.mobile.services.IncidentCategoryService;
 import com.ip2n.mobile.services.IncidentService;
 import com.ip2n.mobile.services.NewsService;
+import com.ip2n.mobile.services.StateService;
 
 import java.util.ArrayList;
 
@@ -282,6 +283,7 @@ public class NigeriaTimelineActivity extends Activity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.report_incident_button:
+                new StateService().fetch(this);
                 new IncidentCategoryService().getAll(this);
                 buttonClicked = 1;
                 break;
