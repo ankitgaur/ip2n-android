@@ -25,6 +25,13 @@ public class GovtDialog {
     public void showOptions(final String []items){
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle("Select Government");
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                NigeriaSendReportActivity.setIsGovtDialogShowing(false);
+
+            }
+        });
         builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
 

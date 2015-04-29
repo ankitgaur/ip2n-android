@@ -27,6 +27,13 @@ public class StateDialog {
     public void showOptions(final String []items){
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle("Select State");
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                NigeriaSendReportActivity.setIsStateDialogShowing(false);
+
+            }
+        });
         builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
 

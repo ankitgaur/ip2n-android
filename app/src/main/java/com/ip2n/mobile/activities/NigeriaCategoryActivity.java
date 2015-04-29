@@ -106,7 +106,11 @@ public class NigeriaCategoryActivity extends Activity {
                     if(categoryId != null) {
                          idt = categoryId.get(position);
                     }
-                    String questions = IncidentCategoryService.getTypeById(idt).getQuestions();
+                    String questions = null;
+                    if(IncidentCategoryService.getTypeById(idt) != null) {
+
+                        questions = IncidentCategoryService.getTypeById(idt).getQuestions();
+                    }
 
                     Intent i = new Intent(mContext, NigeriaSendReportActivity.class);
                     i.putExtra("questions", questions);

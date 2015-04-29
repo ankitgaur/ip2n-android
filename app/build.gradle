@@ -8,8 +8,8 @@ android {
         applicationId "com.ip2n.mobile"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
     }
     buildTypes {
         release {
@@ -22,7 +22,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:support-v4:21.0.3'
-    compile 'com.android.support:appcompat-v7:21.0.3'
     compile files('libs/volley.jar')
     compile files('libs/httpmime-4.3.jar')
     compile files('libs/httpcore-4.3-beta1.jar')

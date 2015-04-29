@@ -23,7 +23,8 @@
         android:layout_marginTop="15dp"
         android:text="@string/send_report_desc_header"
         android:textSize="20dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/category_textview_color"/>
 
     <ListView
         android:id="@+id/category_list_view"
@@ -31,7 +32,7 @@
         android:layout_height="315dp"
         android:layout_below="@+id/send_report_text"
         android:layout_marginTop="5dp"
-        android:divider="@color/secondary_text_disabled_material_dark"
+        android:divider="@android:color/transparent"
         android:dividerHeight="5dp"></ListView>
 
     <TextView
@@ -42,6 +43,7 @@
         android:layout_marginTop="5dp"
         android:text="@string/send_report_desc_footer"
         android:textSize="20dp"
+        android:textColor="@color/category_textview_color"
         android:textStyle="bold" />
 
 </RelativeLayout>

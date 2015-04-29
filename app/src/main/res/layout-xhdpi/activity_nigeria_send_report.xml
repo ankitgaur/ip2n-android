@@ -3,155 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/timeline_bg"
-    android:paddingBottom="5dp"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
     android:paddingTop="5dp"
     tools:context=".NigeriaSendReportActivity">
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/logo"></ImageView>
-
-    <ScrollView
-        android:layout_width="wrap_content"
-         android:layout_height="match_parent"
-        android:layout_below="@+id/logo">
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="23dp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:layout_centerHorizontal="true"
-                android:id="@+id/category_textview"/>
 
 
-            <LinearLayout
-                android:id="@+id/report_textview_layout"
+
+            <ListView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_height="match_parent"
+                android:id="@+id/more_details_listview"
+                android:layout_below="@+id/desc_divider_view"
+                android:divider="@color/submit_button_color"
+                android:dividerHeight="1dp"
                 android:layout_marginTop="10dp"
-                android:layout_below="@+id/category_textview"
-                android:gravity="left"
-                android:orientation="vertical">
+                android:scrollbars="none">
+
+            </ListView>
 
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/date_textview"
-                    android:textColor="@color/black"
-                    android:textSize="22dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="35dp"
-                    android:text="@string/time_textview"
-                    android:textColor="@color/black"
-                    android:textSize="22dp" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="35dp"
-                    android:text="State"
-                    android:textColor="@color/black"
-                    android:textSize="22dp" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="35dp"
-                    android:text="Local Govt"
-                    android:textColor="@color/black"
-                    android:textSize="22dp" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="35dp"
-                    android:text="Description"
-                    android:textColor="@color/black"
-                    android:textSize="22dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/edit_text_layout"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="15dp"
-                android:layout_below="@+id/category_textview"
-                android:orientation="vertical">
-
-
-                <EditText
-                    android:id="@+id/dateEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/popup_bg"
-                    android:inputType="date"
-                    android:paddingLeft="5dp"
-                    android:textColor="@color/category_textview_color" />
-
-                <EditText
-                    android:id="@+id/timeEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/popup_bg"
-                    android:inputType="time"
-                    android:paddingLeft="5dp"
-                    android:textColor="@color/category_textview_color" />
-                <EditText
-                    android:id="@+id/stateEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/popup_bg"
-                    android:paddingLeft="5dp"
-                    android:textColor="@color/category_textview_color" />
-                <EditText
-                    android:id="@+id/govtEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/popup_bg"
-                    android:paddingLeft="5dp"
-                    android:textColor="@color/category_textview_color" />
-
-                <EditText
-                    android:id="@+id/description_edittext"
-                    android:layout_width="match_parent"
-                    android:background="@drawable/popup_bg"
-                    android:layout_below="@+id/timeEditText"
-                    android:layout_marginTop="10dp"
-                    android:layout_height="80dp"
-                    android:padding="2dp"
-                    android:gravity="left|top"
-                    android:hint="80 character limit"
-                    android:maxLength="80"/>
-
-            </LinearLayout>
             <android.support.v4.view.ViewPager
                 android:id="@+id/question_view_flipper"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="150dp"
                 android:layout_marginTop="10dp"
-                android:layout_below="@+id/edit_text_layout"
+                android:layout_below="@+id/desc_divider_view"
+                android:visibility="gone"
                 >
 
             </android.support.v4.view.ViewPager>
@@ -166,6 +45,7 @@
                 android:layout_below="@+id/question_view_flipper"
                 android:textColor="@drawable/button_text_selector"
                 android:layout_centerHorizontal="true"
+                android:visibility="gone"
 
                 android:textStyle="bold" />
 
@@ -182,5 +62,3 @@
                 android:layout_centerHorizontal="true"
                 android:textStyle="bold" />
         </RelativeLayout>
-    </ScrollView>
-</RelativeLayout>

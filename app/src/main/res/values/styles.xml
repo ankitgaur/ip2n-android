@@ -1,14 +1,40 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="android:actionDropDownStyle">@style/MyActionBarSpinnerStyle</item>
+    <style name="AppTheme" parent="android:Theme.Holo">
+        <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="android:actionMenuTextColor">@drawable/actionbar_textcolor</item>
+        <item name="android:actionBarDivider">@drawable/actionbar_divider</item>
+        <item name="android:dividerHeight">30dp</item>
+        <item name="android:titleTextAppearance">@style/TitleTextAppearance</item>
+
+
+
 
 
     </style>
+    <style name="ActionBar" parent="android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/nigeria_green</item>
 
-    <style name="MyActionBarSpinnerStyle">
-        <item name="android:background">@color/black</item>
+
     </style>
+    <style name="TextAppearance" parent="android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:textColor">@drawable/actionbar_textcolor</item>
+
+
+
+    </style>
+    <style name="TitleTextAppearance" parent="android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:textColor">@drawable/actionbar_textcolor</item>
+        <item name="android:ellipsize">marquee</item>
+
+    </style>
+
+
+    <style name = "NoActionBar" parent = "android:Theme.Holo.Light">
+        <item name = "android:windowActionBar">false</item>
+        <item name = "android:windowNoTitle">true</item>
+
+    </style>
+
 </resources>

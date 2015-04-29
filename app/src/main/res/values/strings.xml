@@ -15,7 +15,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_textview">Title</string>
     <string name="category_textview">Category</string>
-    <string name="date_textview">Date*</string>
+    <string name="date_textview">Date and Time*</string>
     <string name="time_textview">Time*</string>
     <string name="state_textview">State</string>
     <string name="govt_textview">Local Government</string>
@@ -30,6 +30,12 @@
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
     <string name="incidents_instruction_text">Hold and pull down for latest incidents</string>
     <string name="news_instruction_text">Click on an article to read more.</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="next">Next</string>
+
+
+
 
 
 </resources>
