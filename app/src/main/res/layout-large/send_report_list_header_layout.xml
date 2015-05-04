@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <RelativeLayout
+        android:id="@+id/send_report_header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+
+        <LinearLayout
+            android:id="@+id/date_time_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:gravity="left"
+            android:orientation="vertical"
+            android:paddingLeft="8dp"
+            android:paddingRight="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date_textview"
+                style="@style/question_textview_style"/>
+
+            <LinearLayout
+                android:id="@+id/date_time_editext_layout"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="2dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/dateEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    style="@style/answer_textview_style"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/popup_bg"
+                    android:hint="DD/MM/YYYY"
+                    android:inputType="date"
+                    android:paddingLeft="5dp"
+                    />
+
+                <EditText
+                    android:id="@+id/timeEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/popup_bg"
+                    android:hint="12:00 AM"
+                    android:inputType="time"
+                    android:paddingLeft="5dp"
+                    style="@style/answer_textview_style"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/date_divider_view"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@+id/date_time_layout"
+            android:layout_marginTop="12dp"
+            android:background="@color/submit_button_color"></View>
+
+        <RelativeLayout
+            android:id="@+id/state_layout"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/date_divider_view"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/state_govt_layout_bg"
+            android:clickable="true"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:text="State*"
+                style="@style/question_textview_style"/>
+
+            <ImageButton
+                android:id="@+id/state_arrow_imageview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/arrow_circle" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/stateEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@+id/state_layout"
+            android:paddingLeft="8dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="10dp"
+            style="@style/answer_textview_style"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/state_divider_view"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@+id/stateEditText"
+            android:background="@color/submit_button_color" />
+
+        <RelativeLayout
+            android:id="@+id/govt_layout"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_below="@+id/state_divider_view"
+            android:background="@drawable/state_govt_layout_bg"
+            android:clickable="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:text="Local Govt*"
+                style="@style/question_textview_style"/>
+
+
+
+            <ImageView
+                android:id="@+id/govt_arrow_imageview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:src="@drawable/arrow_circle" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/govtEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@+id/govt_layout"
+            android:paddingLeft="8dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="10dp"
+            style="@style/answer_textview_style"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/govt_divider_view"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@+id/govtEditText"
+            android:background="@color/submit_button_color" />
+
+        <LinearLayout
+            android:id="@+id/desc_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/govt_divider_view"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingLeft="8dp"
+            android:paddingRight="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                style="@style/question_textview_style"/>
+
+            <EditText
+                android:id="@+id/description_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@+id/timeEditText"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/popup_bg"
+                android:gravity="left|top"
+                android:hint="80 character limit"
+                android:maxLength="80"
+                android:paddingLeft="5dp"
+                style="@style/answer_textview_style"/>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/desc_divider_view"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@+id/desc_layout"
+            android:layout_marginTop="12dp"
+            android:background="@color/submit_button_color"></View>
+
+    </RelativeLayout>
+</RelativeLayout>

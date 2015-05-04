@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="question_textview_style">
+        <item name="android:textSize">19dp</item>
+        <item name="android:textColor">@color/black</item>
+
+    </style>
+    <style name="answer_textview_style">
+        <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/category_textview_color</item>
+
+    </style>
+
+</resources>

@@ -33,7 +33,7 @@
         android:layout_below="@+id/send_report_text"
         android:layout_marginTop="5dp"
         android:divider="@android:color/transparent"
-        android:dividerHeight="5dp"></ListView>
+        android:dividerHeight="7dp"></ListView>
 
     <TextView
         android:id="@+id/send_report_text_footer"

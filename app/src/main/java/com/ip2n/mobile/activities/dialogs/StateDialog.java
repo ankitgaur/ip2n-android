@@ -25,33 +25,33 @@ public class StateDialog {
     }
 
     public void showOptions(final String []items){
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setTitle("Select State");
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                NigeriaSendReportActivity.setIsStateDialogShowing(false);
-
-            }
-        });
-        builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-
-                NigeriaSendReportActivity.setStateEditText(items[item]);
-                NigeriaSendReportActivity.setIsStateDialogShowing(false);
-
-                String state = NigeriaSendReportActivity.getStateEditText().getText().toString();
-                State st = StateService.getStateByName(state);
-                if(st!=null){
-                    String currGovt = st.getCurrGovt();
-                    NigeriaSendReportActivity.setGovtEditText(currGovt);
-                }
-
-                dialog.dismiss();
-
-            }
-        }).show();
-        NigeriaSendReportActivity.setIsStateDialogShowing(true);
+//        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+//        builder.setTitle("Select State");
+//        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialog) {
+//                NigeriaSendReportActivity.setIsStateDialogShowing(false);
+//
+//            }
+//        });
+//        builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog, int item) {
+//
+//                NigeriaSendReportActivity.setStateEditText(items[item]);
+//                NigeriaSendReportActivity.setIsStateDialogShowing(false);
+//
+//                String state = NigeriaSendReportActivity.getStateEditText().getText().toString();
+//                State st = StateService.getStateByName(state);
+//                if(st!=null){
+//                    String currGovt = st.getCurrGovt();
+//                    NigeriaSendReportActivity.setGovtEditText(currGovt);
+//                }
+//
+//                dialog.dismiss();
+//
+//            }
+//        }).show();
+//        NigeriaSendReportActivity.setIsStateDialogShowing(true);
     }
 
 }

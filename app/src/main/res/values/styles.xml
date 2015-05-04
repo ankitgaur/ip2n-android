@@ -10,20 +10,32 @@
 
 
 
-
-
     </style>
+
+    <style name="AlertDialogCustom" parent="@android:style/Theme.Dialog">
+        <item name="android:textColor">#00FF00</item>
+        <item name="android:typeface">monospace</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:dividerHeight">5dp</item>
+    </style>
+    <style name="dialog_title_style" parent="android:Widget.TextView">
+        <item name="android:textColor">#00FF00</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:background">@color/nigeria_green</item>
+    </style>
+
     <style name="ActionBar" parent="android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">@color/nigeria_green</item>
 
 
     </style>
+
     <style name="TextAppearance" parent="android:style/Widget.Holo.Light.ActionBar">
         <item name="android:textColor">@drawable/actionbar_textcolor</item>
 
 
-
     </style>
+
     <style name="TitleTextAppearance" parent="android:style/Widget.Holo.Light.ActionBar">
         <item name="android:textColor">@drawable/actionbar_textcolor</item>
         <item name="android:ellipsize">marquee</item>
@@ -31,9 +43,21 @@
     </style>
 
 
-    <style name = "NoActionBar" parent = "android:Theme.Holo.Light">
-        <item name = "android:windowActionBar">false</item>
-        <item name = "android:windowNoTitle">true</item>
+    <style name="NoActionBar" parent="android:Theme.Holo.Light">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+
+    </style>
+
+    <style name="question_textview_style">
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">@color/black</item>
+
+    </style>
+
+    <style name="answer_textview_style">
+        <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/category_textview_color</item>
 
     </style>
 

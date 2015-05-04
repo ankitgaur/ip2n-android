@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
+
 
     <RelativeLayout
         android:id="@+id/send_report_header_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:visibility="gone">
+        android:focusableInTouchMode="true">
 
 
         <LinearLayout
@@ -213,126 +213,5 @@
             android:layout_below="@+id/desc_layout"
             android:layout_marginTop="8dp"
             android:background="@color/submit_button_color"></View>
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/send_report_more_details_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <RelativeLayout
-            android:id="@+id/question_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-
-            <RelativeLayout
-                android:id="@+id/question_sub_layout"
-                android:layout_width="match_parent"
-                android:layout_height="41dp"
-                android:clickable="true"
-                android:background="@drawable/state_govt_layout_bg">
-
-                <TextView
-                    android:id="@+id/question"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginBottom="3dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_centerVertical="true"
-                    style="@style/question_textview_style"/>
-
-
-                <ImageView
-                    android:id="@+id/more_details_arrow_imageview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:background="@android:color/transparent"
-                    android:clickable="true"
-                    android:src="@drawable/arrow_circle" />
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/answer_textview"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_below="@+id/question_sub_layout"
-                android:paddingLeft="6dp"
-                android:paddingRight="2dp"
-                android:paddingTop="2dp"
-                android:paddingBottom="3dp"
-                android:background="@drawable/timeline_bg"
-                android:visibility="gone"
-                style="@style/answer_textview_style"/>
-
-            <View
-                android:id="@+id/question_option_divider_view"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/answer_textview"
-                android:background="@color/submit_button_color"></View>
-
-
         </RelativeLayout>
-
-
-        <RelativeLayout
-            android:id="@+id/question_edittext_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/question_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="6dp"
-                android:layout_marginTop="3dp"
-                android:gravity="center_vertical"
-                style="@style/question_textview_style"/>
-
-
-            <EditText
-                android:id="@+id/answer_edittext"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_below="@+id/question_textview"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="2dp"
-                android:background="@drawable/popup_bg"
-                android:gravity="left|top"
-                android:hint="80 character limit"
-                android:maxLength="80"
-                android:paddingLeft="2dp"
-                style="@style/answer_textview_style"/>
-
-
-            <View
-                android:id="@+id/question_text_divider_view"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/answer_edittext"
-                android:layout_marginTop="8dp"
-                android:background="@color/submit_button_color"/>
-
-        </RelativeLayout>
-
-
-
-    </LinearLayout>
-
-
 </RelativeLayout>

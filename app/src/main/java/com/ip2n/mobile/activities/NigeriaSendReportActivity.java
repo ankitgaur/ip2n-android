@@ -11,9 +11,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
+
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -23,21 +25,25 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+
 import android.provider.Settings;
-import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
+
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,98 +55,51 @@ import android.widget.Toast;
 
 import com.ip2n.mobile.R;
 import com.ip2n.mobile.activities.adapters.MoreDetailsListArrayAdapter;
-import com.ip2n.mobile.activities.adapters.ViewPagerAdapter;
-import com.ip2n.mobile.activities.dialogs.GovtDialog;
-import com.ip2n.mobile.activities.dialogs.StateDialog;
+
 import com.ip2n.mobile.models.Question;
 import com.ip2n.mobile.models.State;
 import com.ip2n.mobile.services.IncidentService;
 import com.ip2n.mobile.services.StateService;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 
-public class NigeriaSendReportActivity extends Activity implements LocationListener, View.OnClickListener, TextWatcher {
+public class NigeriaSendReportActivity extends Activity implements  TextWatcher,LocationListener, View.OnClickListener {
 
-    private static boolean isStateDialogShowing = false;
-    private static boolean isGovtDialogShowing = false;
-    private static boolean isDateDialogShowing = false;
-    private static boolean isTimeDialogShowing = false;
     private ListView moreDetailsListView;
 
     private Context mContext;
 
-    private Button submitButton;
 
     private long id;
     private Menu menu;
 
-    private static TextView stateEditText;
-    private static TextView govtEditText;
-    private EditText dateEditText;
-    private EditText timeEditText;
-    private Calendar myCalendar = Calendar.getInstance();
-    private DatePickerDialog.OnDateSetListener date;
-    private TimePickerDialog.OnTimeSetListener time;
-    private String reportTime = null;
+
     private ArrayList<Question> questionList;
-    private ViewPager questionsViewPager;
-    private Button nextButton;
+
     private String type;
     private MyReceiver myReceiver;
     private String incidentID = null;
-    private LocationManager lManager;
-    private Location location;
+    private EditText dateEditText;
+    private EditText timeEditText;
+    private TextView stateEditText;
+    private TextView govtEditText;
+    private EditText descEditText;
 
-    public static boolean isIsStateDialogShowing() {
-        return isStateDialogShowing;
-    }
-
-    public static void setIsStateDialogShowing(boolean isStateDialogShowing) {
-        NigeriaSendReportActivity.isStateDialogShowing = isStateDialogShowing;
-    }
-
-    public static boolean isIsGovtDialogShowing() {
-        return isGovtDialogShowing;
-    }
-
-    public static void setIsGovtDialogShowing(boolean isGovtDialogShowing) {
-        NigeriaSendReportActivity.isGovtDialogShowing = isGovtDialogShowing;
-    }
-
-    public static TextView getGovtEditText() {
-        return govtEditText;
-    }
-
-    public static void setGovtEditText(String govt) {
-        if(govt != null && !govt.isEmpty()) {
-            govtEditText.setVisibility(View.VISIBLE);
-        }
-
-        govtEditText.setText(govt);
-    }
-
-    public static TextView getStateEditText() {
-        return stateEditText;
-    }
-
-    public static void setStateEditText(String state) {
-        stateEditText.setVisibility(View.VISIBLE);
-        stateEditText.setText(state);
-    }
+    private Calendar myCalendar = Calendar.getInstance();
+    private DatePickerDialog.OnDateSetListener date;
+    private TimePickerDialog.OnTimeSetListener time;
+    private static boolean isDateDialogShowing = false;
+    private static boolean isTimeDialogShowing = false;
 
 
     @Override
@@ -165,11 +124,11 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
         init();
     }
 
-    private void initActionBar(){
+    private void initActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowHomeEnabled(false);
-        String category = type.split("\\|")[1].charAt(0)+  type.split("\\|")[1].substring(1,type.split("\\|")[1].length()).toLowerCase();
-        actionBar.setTitle(("Report: "+category));
+        String category = type.split("\\|")[1].charAt(0) + type.split("\\|")[1].substring(1, type.split("\\|")[1].length()).toLowerCase();
+        actionBar.setTitle(("Report: " + category));
 
     }
 
@@ -180,140 +139,14 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
         super.onPause();
         unregisterReceiver(myReceiver);
     }
-    private boolean checkLocationEnabled() {
-        int locationMode = 0;
-        String locationProviders;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-            try {
-                locationMode = Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.LOCATION_MODE);
-
-            } catch (Settings.SettingNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
-
-        }else{
-            locationProviders = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-            return !TextUtils.isEmpty(locationProviders);
-        }
-
-    }
-    private List<Address> getLocation(){
-        LocationManager locManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-
-        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000L,500.0f, this);
-        Location location = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        List<Address> addresses = null;
-
-        double latitude=0;
-        double longitude=0;
-        if(location != null) {
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-            try {
-                addresses = geocoder.getFromLocation(latitude, longitude, 1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return  addresses;
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.state_layout:
-            case R.id.state_arrow_imageview:
-                if (isStateDialogShowing) {
-                    return ;
-                }
-
-                StateDialog sd = new StateDialog(mContext);
-
-                sd.showOptions(StateService.getStates());
-                break;
-            case R.id.govt_layout:
-            case R.id.govt_arrow_imageview:
-                String state = stateEditText.getText().toString();
-                if (!(stateEditText.getVisibility() == View.VISIBLE)) {
-                    Toast.makeText(mContext, "Please select a valid State!",
-                            Toast.LENGTH_LONG).show();
-                    return ;
-
-                }
-                else if(isGovtDialogShowing){
-                    return ;
-                }
-                else {
-                    State st = StateService.getStateByName(state);
-                    if (st == null) {
-                        Toast.makeText(mContext, "Please select a valid State!",
-                                Toast.LENGTH_LONG).show();
-                    } else {
-                        GovtDialog gd = new GovtDialog(mContext);
-                        String[] stts = new String[st.getGovts().size()];
-                        st.getGovts().toArray(stts);
-                        gd.showOptions(stts);
-                    }
-
-                }
-                break;
-
-        }
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if(dateEditText.getText().toString().isEmpty() || timeEditText.getText().toString().isEmpty() ||
-                stateEditText.getText().toString().isEmpty() || govtEditText.getText().toString().isEmpty()){
-            menu.getItem(1).setEnabled(false);
-        }
-        else{
-            menu.getItem(1).setEnabled(true);
-        }
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
-    }
 
     private class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equalsIgnoreCase("pledge.nigeria.com.nigeriapldge.UPLOAD_IMAGE")) {
                 String id = intent.getStringExtra("id");
-                if(id == null)
+                if (id == null)
                     id = "1";
                 incidentID = id;
 
@@ -325,330 +158,40 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
 
     }
 
+
     private void init() {
-        questionsViewPager = (ViewPager) findViewById(R.id.question_view_flipper);
-        //final ViewPagerAdapter adapter = new ViewPagerAdapter(mContext, questionList);
-        //questionsViewPager.setAdapter(adapter);
+
         moreDetailsListView = (ListView) findViewById(R.id.more_details_listview);
-        MoreDetailsListArrayAdapter moreDetailsListArrayAdapter = new MoreDetailsListArrayAdapter(mContext, R.layout.viewpager_item,questionList);
+        LayoutInflater inflater = ((Activity) this).getLayoutInflater();
+        View convertView = inflater.inflate(R.layout.send_report_list_header_layout, null, false);
+        initHeaderLayout(convertView);
+
+        moreDetailsListView.addHeaderView(convertView);
+        MoreDetailsListArrayAdapter moreDetailsListArrayAdapter = new MoreDetailsListArrayAdapter(mContext, R.layout.viewpager_item, questionList);
+
         moreDetailsListView.setAdapter(moreDetailsListArrayAdapter);
+        moreDetailsListView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager im = (InputMethodManager) mContext.getSystemService(
+                    Context.INPUT_METHOD_SERVICE);
+                im.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
-//        RelativeLayout stateLayout = (RelativeLayout) findViewById(R.id.state_layout);
-//        RelativeLayout govtLayout = (RelativeLayout) findViewById(R.id.govt_layout);
-//
-//        stateLayout.setOnClickListener(this);
-//        govtLayout.setOnClickListener(this);
-
-//        ImageView stateArrowImageView = (ImageView) findViewById(R.id.state_arrow_imageview);
-//        ImageView govtArrowImageView = (ImageView) findViewById(R.id.govt_arrow_imageview);
-//
-//        stateArrowImageView.setOnClickListener(this);
-//        govtArrowImageView.setOnClickListener(this);
-
-
-//        stateEditText = (TextView) findViewById(R.id.stateEditText);
-//        govtEditText = (TextView) findViewById(R.id.govtEditText);
-//        if(stateEditText.getText().toString().isEmpty()){
-//            stateEditText.setVisibility(View.GONE);
-//        }
-//        else{
-//            stateEditText.setVisibility(View.VISIBLE);
-//        }
-//        if(govtEditText.getText().toString().isEmpty()){
-//            govtEditText.setVisibility(View.GONE);
-//        }
-//        else{
-//            govtEditText.setVisibility(View.VISIBLE);
-//        }
-//        stateEditText.addTextChangedListener(this);
-//        govtEditText.addTextChangedListener(this);
+                return false;
+            }
+        });
 
 
 
-//        if(checkLocationEnabled()){
-//            if(getLocation() != null) {
-//                String state = getLocation().get(0).getAdminArea();
-//                do {
-//                    if (StateService.isFetched() && StateService.getStateByName(state) != null) {
-//                        stateEditText.setVisibility(View.VISIBLE);
-//                        stateEditText.setText(state);
-//                    }
-//                } while (!StateService.isFetched());
-//            }
-//
-//        }
-
-
-
-
-            nextButton = (Button) findViewById(R.id.next_button);
-            nextButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (questionList.size() - 1 > questionsViewPager.getCurrentItem()) {
-                        Log.i("Kritika", "Array Size :" + questionList.size() + "Current Item : " + questionsViewPager.getCurrentItem());
-                        questionsViewPager.setCurrentItem(questionsViewPager.getCurrentItem() + 1);
-
-                    }
-
-
-                }
-            });
-            questionsViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-                    Log.i("Kritika", "Page selected :" + position);
-
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-
-                    if (questionList.size() - 1 > questionsViewPager.getCurrentItem()) {
-                        submitButton.setVisibility(View.GONE);
-                        nextButton.setVisibility(View.VISIBLE);
-
-                    } else {
-                        submitButton.setVisibility(View.VISIBLE);
-                        nextButton.setVisibility(View.GONE);
-
-                    }
-
-
-
-                }
-            });
-
-
-
-//            dateEditText = (EditText) findViewById(R.id.dateEditText);
-//            timeEditText = (EditText) findViewById(R.id.timeEditText);
-//
-//            dateEditText.addTextChangedListener(this);
-//
-//
-//            myCalendar = Calendar.getInstance();
-//
-//
-//            date = new DatePickerDialog.OnDateSetListener() {
-//
-//
-//                @Override
-//                public void onDateSet(DatePicker view, int year, int monthOfYear,
-//                                      int dayOfMonth) {
-//                    isDateDialogShowing = false;
-//
-//                    // TODO Auto-generated method stub
-//
-//                    myCalendar.set(Calendar.YEAR, year);
-//                    myCalendar.set(Calendar.MONTH, monthOfYear);
-//                    myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-//
-//                    updateDate();
-////                if(datePickerDialog.isShowing())
-////                    datePickerDialog.cancel();
-//                }
-//
-//
-//            };
-//            time = new TimePickerDialog.OnTimeSetListener() {
-//
-//                @Override
-//                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//                    isTimeDialogShowing = false;
-//
-//                    myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-//                    myCalendar.set(Calendar.MINUTE, minute);
-//                    reportTime = hourOfDay + ":" + minute + ":" + "00";
-//                    Log.i("Kritika", "hour of the DAY :" + hourOfDay);
-//                    if (12 - hourOfDay > 0) {
-//                        Log.i("Kritika", "AM");
-//                        if (hourOfDay == 0 && minute >= 10)
-//                            timeEditText.setText("12" + ":" + minute + " " + "AM");
-//                        else if (hourOfDay == 0 && minute <= 10)
-//                            timeEditText.setText("12" + ":" + "0" + minute + " " + "AM");
-//
-//                        else if (hourOfDay < 10 && minute >= 10)
-//                            timeEditText.setText("0" + hourOfDay + ":" + minute + " " + "AM");
-//                        else if (hourOfDay < 10 && minute < 10)
-//                            timeEditText.setText("0" + hourOfDay + ":" + "0" + minute + " " + "AM");
-//                        else if (hourOfDay >= 10 && minute < 10)
-//                            timeEditText.setText(hourOfDay + ":" + "0" + minute + " " + "AM");
-//                        else if (hourOfDay >= 10 && minute >= 10)
-//                            timeEditText.setText(hourOfDay + ":" + minute + " " + "AM");
-//
-//
-//                    } else {
-//                        if (hourOfDay - 12 == 0 && minute >= 10)
-//                            timeEditText.setText("12" + ":" + minute + " " + "PM");
-//                        else if (hourOfDay - 12 == 0 && minute < 10)
-//                            timeEditText.setText("12" + ":" + "0" + minute + " " + "PM");
-//                        else if (hourOfDay - 12 < 10 && minute >= 10)
-//                            timeEditText.setText("0" + (hourOfDay - 12) + ":" + minute + " " + "PM");
-//                        else if (hourOfDay - 12 < 10 && minute < 10)
-//                            timeEditText.setText("0" + (hourOfDay - 12) + ":" + "0" + minute + " " + "PM");
-//                        else if (hourOfDay - 12 >= 10 && minute < 10)
-//                            timeEditText.setText(hourOfDay - 12 + ":" + "0" + minute + " " + "PM");
-//                        else if (hourOfDay - 12 >= 10 && minute >= 10)
-//                            timeEditText.setText(hourOfDay - 12 + ":" + minute + " " + "PM");
-//                    }
-//
-//                }
-//            };
-
-
-
-//            dateEditText.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    if (isDateDialogShowing)
-//                        return true;
-//
-//                    DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, date, myCalendar
-//                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-//                            myCalendar.get(Calendar.DAY_OF_MONTH));
-//                    datePickerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//                        @Override
-//                        public void onDismiss(DialogInterface dialog) {
-//                            isDateDialogShowing = false;
-//                        }
-//                    });
-//
-//                    if (!datePickerDialog.isShowing()) {
-//                        isDateDialogShowing = true;
-//                        datePickerDialog.show();
-//                    }
-//
-//                    return true;
-//                }
-//            });
-//
-//            timeEditText.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    if (isTimeDialogShowing)
-//                        return true;
-//                    TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, time, myCalendar.get(Calendar.HOUR_OF_DAY), myCalendar.get(Calendar.MINUTE), false);
-//                    timePickerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//                        @Override
-//                        public void onDismiss(DialogInterface dialog) {
-//                            isTimeDialogShowing = false;
-//                        }
-//                    });
-//                    if (!timePickerDialog.isShowing()) {
-//                        isTimeDialogShowing = true;
-//                        timePickerDialog.show();
-//                    }
-//                    return true;
-//                }
-//            });
-//
-
-            submitButton = (Button) findViewById(R.id.submit_button);
-//            submitButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (dateEditText.getText().toString().isEmpty()) {
-//                        Toast.makeText(getApplicationContext(), "Please fill Date Field before proceeding!",
-//                                Toast.LENGTH_LONG).show();
-//
-//                    }
-//                    else if(timeEditText.getText().toString().isEmpty()){
-//                        Toast.makeText(getApplicationContext(), "Please fill Time Field before proceeding!",
-//                                Toast.LENGTH_LONG).show();
-//
-//                    }
-//
-//                    else {
-//
-//                        String questions = null;
-//
-//                        JSONObject obj = null;
-//                        try {
-//                            obj = adapter.getJson();
-//                            questions = obj.toString();
-//                        } catch (JSONException e) {
-//                            obj = new JSONObject();
-//                            questions = new JSONObject().toString();
-//                        }
-//
-//                        String state = "null";
-//                        String govt = "null";
-//
-//                        if(stateEditText.getText().toString()!=null && !stateEditText.getText().toString().isEmpty()){
-//                            state = stateEditText.getText().toString();
-//                        }
-//
-//                        if(govtEditText.getText().toString()!=null && !govtEditText.getText().toString().isEmpty()){
-//                            govt = govtEditText.getText().toString();
-//                        }
-//
-//
-//
-//
-//                        String description = ((EditText) findViewById(R.id.description_edittext)).getText().toString();
-//                        try {
-//                            JSONObject reportDetails = new JSONObject();
-//                            //reportDetails.put("createdOn", String.valueOf(new Date().getTime()));
-//                            reportDetails.put("createdOn", new Date().getTime());
-//                            reportDetails.put("description", description);
-//                            reportDetails.put("type", type);
-//                            reportDetails.put("state", state);
-//                            reportDetails.put("govt", govt);
-//                            reportDetails.put("questions", questions);
-//                            try {
-//                                Long reportDt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateEditText.getText().toString() + " " + reportTime).getTime();
-//                                reportDetails.put("reportDate", reportDt);
-//                            } catch (ParseException e) {
-//                                reportDetails.put("reportDate", null);
-//                            }
-//                            reportDetails.put("createdBy", "admin");
-//                            IncidentService.getSingleton().create(reportDetails, mContext);
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//
-//
-//                    }
-//
-//
-//                }
-//            });
-
-        }
-
-
-
-
-
-    private void updateDate() {
-
-        String myFormat = "dd/MM/yyyy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
-        dateEditText.setText(sdf.format(myCalendar.getTime()));
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_nigeria_send_report, menu);
-//        if(dateEditText.getText().toString().isEmpty() ||
-//                timeEditText.getText().toString().isEmpty() ||
-//                stateEditText.getVisibility() != View.VISIBLE || govtEditText.getVisibility() != View.VISIBLE){
-//            menu.getItem(1).setEnabled(false);
-//
-//        }
-//        else{
-//            menu.getItem(1).setEnabled(true);
-//        }
+
         return true;
     }
 
@@ -659,15 +202,15 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        switch(id){
+        switch (id) {
             case R.id.action_cancel:
                 this.finish();
                 break;
+            case R.id.action_save:
+                //Save Report here
+                break;
 
         }
-
-        //noinspection SimplifiableIfStatement
-
 
         return super.onOptionsItemSelected(item);
     }
@@ -682,11 +225,11 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
 
 
     }
+
     Bitmap bitmap;
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (resultCode == RESULT_OK)
-        {
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
             Uri selectedImageUri = data.getData();
             String filePath = null;
 
@@ -709,10 +252,10 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
 
                 if (filePath != null) {
                     File file = new File(filePath);
-                    if(file.exists()) {
+                    if (file.exists()) {
                         IncidentService.getSingleton().uploadFile("incident_image", file, mContext, incidentID);
                     }
-                   // decodeFile(filePath);
+                    // decodeFile(filePath);
                 } else {
                     bitmap = null;
                 }
@@ -724,8 +267,9 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
 
 
     }
+
     public String getPath(Uri uri) {
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = managedQuery(uri, projection, null, null, null);
         if (cursor != null) {
             // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
@@ -739,9 +283,9 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
     }
 
 
-    public static ArrayList<Question> getQuestionMap(String questions){
+    public static ArrayList<Question> getQuestionMap(String questions) {
         ArrayList<Question> quest = new ArrayList<Question>();
-        quest.add(null);
+        //quest.add(null);
 
         InputStreamReader ireader = new InputStreamReader(new ByteArrayInputStream(questions.getBytes()));
 
@@ -749,30 +293,32 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
 
         try {
             reader.beginObject();
-            while(reader.hasNext()){
+            while (reader.hasNext()) {
                 Question q = new Question();
 
                 q.setName(reader.nextName());
                 List<String> options = new ArrayList<String>();
-                if(reader.peek() != JsonToken.NULL){
+                if (reader.peek() != JsonToken.NULL) {
                     reader.beginArray();
-                    while(reader.hasNext()){
+                    while (reader.hasNext()) {
                         options.add(reader.nextString());
                     }
                     reader.endArray();
-                }else{
+                } else {
                     reader.nextNull();
                 }
                 q.setOptions(options);
                 quest.add(q);
-            }reader.endObject();
+            }
+            reader.endObject();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
         return quest;
     }
-    public void showInstructionPopup(){
+
+    public void showInstructionPopup() {
         final Dialog dialog = new Dialog(mContext);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -812,5 +358,355 @@ public class NigeriaSendReportActivity extends Activity implements LocationListe
         dialog.show();
     }
 
+    public void initHeaderLayout(View convertView) {
+        RelativeLayout stateLayout = (RelativeLayout) convertView.findViewById(R.id.state_layout);
+        RelativeLayout govtLayout = (RelativeLayout) convertView.findViewById(R.id.govt_layout);
+
+        stateLayout.setOnClickListener(this);
+        govtLayout.setOnClickListener(this);
+
+        ImageView stateArrowImageView = (ImageView) convertView.findViewById(R.id.state_arrow_imageview);
+        ImageView govtArrowImageView = (ImageView) convertView.findViewById(R.id.govt_arrow_imageview);
+
+        stateArrowImageView.setOnClickListener(this);
+        govtArrowImageView.setOnClickListener(this);
+        if (descEditText == null) {
+            descEditText = (EditText) convertView.findViewById(R.id.description_edittext);
+        }
+
+
+
+        if (stateEditText == null) {
+            stateEditText = (TextView) convertView.findViewById(R.id.stateEditText);
+        }
+        if (govtEditText == null) {
+            govtEditText = (TextView) convertView.findViewById(R.id.govtEditText);
+        }
+        if (stateEditText.getText().toString().isEmpty()) {
+            stateEditText.setVisibility(View.GONE);
+        } else {
+            stateEditText.setVisibility(View.VISIBLE);
+        }
+        if (govtEditText.getText().toString().isEmpty()) {
+            govtEditText.setVisibility(View.GONE);
+        } else {
+            govtEditText.setVisibility(View.VISIBLE);
+        }
+        stateEditText.addTextChangedListener(this);
+        govtEditText.addTextChangedListener(this);
+
+
+        if (checkLocationEnabled()) {
+            if (getLocation() != null) {
+                String state = getLocation().get(0).getAdminArea();
+                do {
+                    if (StateService.isFetched() && StateService.getStateByName(state) != null) {
+                        stateEditText.setVisibility(View.VISIBLE);
+                        stateEditText.setText(state);
+                    }
+                } while (!StateService.isFetched());
+            }
+
+        }
+        if (dateEditText == null) {
+            dateEditText = (EditText) convertView.findViewById(R.id.dateEditText);
+        }
+        if (timeEditText == null) {
+            timeEditText = (EditText) convertView.findViewById(R.id.timeEditText);
+        }
+
+        dateEditText.addTextChangedListener(this);
+        timeEditText.addTextChangedListener(this);
+
+
+        myCalendar = Calendar.getInstance();
+
+
+        date = new DatePickerDialog.OnDateSetListener() {
+
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                isDateDialogShowing = false;
+
+                // TODO Auto-generated method stub
+
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                updateDate();
+
+            }
+
+
+        };
+        time = new TimePickerDialog.OnTimeSetListener() {
+
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                isTimeDialogShowing = false;
+
+                myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                myCalendar.set(Calendar.MINUTE, minute);
+                String reportTime = hourOfDay + ":" + minute + ":" + "00";
+                Log.i("Kritika", "hour of the DAY :" + hourOfDay);
+                if (12 - hourOfDay > 0) {
+                    Log.i("Kritika", "AM");
+                    if (hourOfDay == 0 && minute >= 10)
+                        timeEditText.setText("12" + ":" + minute + " " + "AM");
+                    else if (hourOfDay == 0 && minute <= 10)
+                        timeEditText.setText("12" + ":" + "0" + minute + " " + "AM");
+
+                    else if (hourOfDay < 10 && minute >= 10)
+                        timeEditText.setText("0" + hourOfDay + ":" + minute + " " + "AM");
+                    else if (hourOfDay < 10 && minute < 10)
+                        timeEditText.setText("0" + hourOfDay + ":" + "0" + minute + " " + "AM");
+                    else if (hourOfDay >= 10 && minute < 10)
+                        timeEditText.setText(hourOfDay + ":" + "0" + minute + " " + "AM");
+                    else if (hourOfDay >= 10 && minute >= 10)
+                        timeEditText.setText(hourOfDay + ":" + minute + " " + "AM");
+
+
+                } else {
+                    if (hourOfDay - 12 == 0 && minute >= 10)
+                        timeEditText.setText("12" + ":" + minute + " " + "PM");
+                    else if (hourOfDay - 12 == 0 && minute < 10)
+                        timeEditText.setText("12" + ":" + "0" + minute + " " + "PM");
+                    else if (hourOfDay - 12 < 10 && minute >= 10)
+                        timeEditText.setText("0" + (hourOfDay - 12) + ":" + minute + " " + "PM");
+                    else if (hourOfDay - 12 < 10 && minute < 10)
+                        timeEditText.setText("0" + (hourOfDay - 12) + ":" + "0" + minute + " " + "PM");
+                    else if (hourOfDay - 12 >= 10 && minute < 10)
+                        timeEditText.setText(hourOfDay - 12 + ":" + "0" + minute + " " + "PM");
+                    else if (hourOfDay - 12 >= 10 && minute >= 10)
+                        timeEditText.setText(hourOfDay - 12 + ":" + minute + " " + "PM");
+                }
+
+            }
+        };
+
+
+        dateEditText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (isDateDialogShowing)
+                    return true;
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        isDateDialogShowing = false;
+                    }
+                });
+
+                if (!datePickerDialog.isShowing()) {
+                    isDateDialogShowing = true;
+                    datePickerDialog.show();
+                }
+
+                return true;
+            }
+        });
+
+        timeEditText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (isTimeDialogShowing)
+                    return true;
+                TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, time, myCalendar.get(Calendar.HOUR_OF_DAY), myCalendar.get(Calendar.MINUTE), false);
+                timePickerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        isTimeDialogShowing = false;
+                    }
+                });
+                if (!timePickerDialog.isShowing()) {
+                    isTimeDialogShowing = true;
+                    timePickerDialog.show();
+                }
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (dateEditText == null || timeEditText == null || stateEditText == null || govtEditText == null) {
+            return;
+        } else {
+
+            if (dateEditText.getText().toString().isEmpty() || timeEditText.getText().toString().isEmpty() ||
+                    stateEditText.getText().toString().isEmpty() || govtEditText.getText().toString().isEmpty()) {
+                menu.getItem(1).setEnabled(false);
+            } else {
+                menu.getItem(1).setEnabled(true);
+
+            }
+        }
+
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
+    }
+
+
+
+    private void updateDate() {
+
+        String myFormat = "dd/MM/yyyy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        dateEditText.setText(sdf.format(myCalendar.getTime()));
+    }
+    public void showOptions(final String []items , String title, final int id){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogCustom));
+        LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+        View customTitleView = inflater.inflate(R.layout.custom_dialog_title,null,false);
+        TextView dialogTitleTextView = (TextView)customTitleView.findViewById(R.id.dialog_title_textview);
+        dialogTitleTextView.setText(title+" "+":");
+
+        builder.setCustomTitle(customTitleView);
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+
+            }
+        });
+        builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                switch (id){
+                    case 1:
+                        stateEditText.setVisibility(View.VISIBLE);
+                        stateEditText.setText(items[item]);
+                        String state = stateEditText.getText().toString();
+                        State st = StateService.getStateByName(state);
+                        if (st != null) {
+                            String currGovt = st.getCurrGovt();
+                            govtEditText.setVisibility(View.VISIBLE);
+                            govtEditText.setText(currGovt);
+                        }
+                        break;
+                    case 2:
+                        govtEditText.setVisibility(View.VISIBLE);
+                        govtEditText.setText(items[item]);
+                        break;
+
+
+                }
+
+
+                dialog.dismiss();
+
+            }
+        }).show();
+    }
+    @Override
+    public void onClick(View v) {
+        InputMethodManager im = (InputMethodManager) mContext.getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        im.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        switch (v.getId()) {
+            case R.id.state_layout:
+            case R.id.state_arrow_imageview:
+                showOptions(StateService.getStates(), "Select State", 1);
+                break;
+            case R.id.govt_layout:
+            case R.id.govt_arrow_imageview:
+                String state = stateEditText.getText().toString();
+                if (!(stateEditText.getVisibility() == View.VISIBLE)) {
+                    Toast.makeText(mContext, "Please select a valid State!",
+                            Toast.LENGTH_LONG).show();
+                    return;
+
+                } else {
+                    State st = StateService.getStateByName(state);
+                    if (st == null) {
+                        Toast.makeText(mContext, "Please select a valid State!",
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        String[] stts = new String[st.getGovts().size()];
+                        st.getGovts().toArray(stts);
+                        showOptions(stts, "Select Govt", 2);
+                    }
+
+                }
+                break;
+        }
+    }
+    private boolean checkLocationEnabled() {
+        int locationMode = 0;
+        String locationProviders;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            try {
+                locationMode = Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+        }else{
+            locationProviders = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
+
+    }
+    private List<Address> getLocation(){
+        LocationManager locManager = (LocationManager)mContext.getSystemService(Context.LOCATION_SERVICE);
+
+        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000L,500.0f, this);
+        Location location = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        List<Address> addresses = null;
+
+        double latitude=0;
+        double longitude=0;
+        if(location != null) {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+            Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+            try {
+                addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return  addresses;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
 
 }

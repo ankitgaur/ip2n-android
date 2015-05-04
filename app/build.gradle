@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.1"
 
     defaultConfig {
-        applicationId "com.ip2n.mobile"
+        applicationId "com.ip2n.mobileapp"
         minSdkVersion 16
         targetSdkVersion 21
         versionCode 3

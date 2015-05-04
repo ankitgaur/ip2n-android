@@ -31,6 +31,7 @@
         android:layout_height="200dp"
         android:layout_below="@+id/send_report_text"
         android:layout_marginTop="5dp"
+
         android:divider="@android:color/transparent"
         android:dividerHeight="5dp"></ListView>
 

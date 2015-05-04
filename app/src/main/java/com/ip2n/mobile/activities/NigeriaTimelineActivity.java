@@ -64,6 +64,7 @@ public class NigeriaTimelineActivity extends Activity implements View.OnClickLis
     private Button signOutButton;
     private MyReceiver myReceiver;
     private SharedPreferences settings;
+    private static int reportIncidentClickCount =0;
 
     public int getButtonClicked() {
         return buttonClicked;
@@ -80,12 +81,14 @@ public class NigeriaTimelineActivity extends Activity implements View.OnClickLis
         setContentView(R.layout.activity_nigeria_timeline);
         mContext = this;
         settings = getSharedPreferences("FIRST_TIME_RUN", 0);
+        reportIncidentClickCount = 0;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         buttonClicked = getButtonClicked();
+        reportIncidentClickCount = 0;
         loadMoreNews = false;
         loadMoreEntertainment = false;
         loadMoreIncidents = false;
@@ -283,8 +286,11 @@ public class NigeriaTimelineActivity extends Activity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.report_incident_button:
-                new StateService().fetch(this);
-                new IncidentCategoryService().getAll(this);
+                if(!(reportIncidentClickCount>0)) {
+                    new StateService().fetch(this);
+                    new IncidentCategoryService().getAll(this);
+                }
+                reportIncidentClickCount++;
                 buttonClicked = 1;
                 break;
             case R.id.feed_button:
