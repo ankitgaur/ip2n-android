@@ -61,14 +61,19 @@ import com.ip2n.mobile.models.State;
 import com.ip2n.mobile.services.IncidentService;
 import com.ip2n.mobile.services.StateService;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -94,7 +99,7 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
     private TextView stateEditText;
     private TextView govtEditText;
     private EditText descEditText;
-
+    private MoreDetailsListArrayAdapter moreDetailsListArrayAdapter;
     private Calendar myCalendar = Calendar.getInstance();
     private DatePickerDialog.OnDateSetListener date;
     private TimePickerDialog.OnTimeSetListener time;
@@ -167,14 +172,14 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
         initHeaderLayout(convertView);
 
         moreDetailsListView.addHeaderView(convertView);
-        MoreDetailsListArrayAdapter moreDetailsListArrayAdapter = new MoreDetailsListArrayAdapter(mContext, R.layout.viewpager_item, questionList);
+        moreDetailsListArrayAdapter = new MoreDetailsListArrayAdapter(mContext, R.layout.viewpager_item, questionList);
 
         moreDetailsListView.setAdapter(moreDetailsListArrayAdapter);
         moreDetailsListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager im = (InputMethodManager) mContext.getSystemService(
-                    Context.INPUT_METHOD_SERVICE);
+                        Context.INPUT_METHOD_SERVICE);
                 im.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
                 return false;
@@ -208,11 +213,62 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
                 break;
             case R.id.action_save:
                 //Save Report here
+                try {
+                    Log.i("Ankitn","SENDING rEPORT");
+                    sendReport();
+                }
+                catch (Exception e){
+                    Toast.makeText(getApplicationContext(), "Report could not be submitted",
+                            Toast.LENGTH_LONG).show();
+                }
                 break;
 
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sendReport() throws JSONException {
+        JSONObject obj = moreDetailsListArrayAdapter.getJson();
+
+        JSONObject json = new JSONObject();
+
+        //put createdOn
+        json.put("createdOn", new Date().getTime());
+        json.put("createdBy", "admin");
+
+        //put incident type
+        json.put("type", type.split("\\|")[1]);
+
+        //put reportDate
+        try {
+            //Log.i("Ankitn",dateEditText.getText().toString());
+            //Log.i("Ankitn",timeEditText.getText().toString());
+            Long reportDt = new SimpleDateFormat("dd/MM/yyyy hh:mm a").parse(dateEditText.getText().toString() + " " + timeEditText.getText().toString()).getTime();
+            json.put("reportDate", reportDt);
+        } catch (ParseException e) {
+            json.put("reportDate", null);
+        }
+
+        //put state
+        String state = stateEditText.getText().toString();
+        json.put("state", state);
+
+        //put govt
+        String govt = govtEditText.getText().toString();
+        json.put("govt", govt);
+
+        //put description
+        String description = descEditText.getText().toString();
+        json.put("description", description);
+
+        //put questions
+        json.put("questions", obj.toString());
+
+        Log.i("Ankitn","Json object : "+json);
+        //call IncidentService create
+        IncidentService.getSingleton().create(json,mContext);
+
     }
 
     public class Uploader {

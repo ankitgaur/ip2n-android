@@ -1,5 +1,7 @@
 package com.ip2n.mobile.models;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by kritika_pathak on 4/8/2015.
  */
@@ -16,6 +18,15 @@ public class Incident {
     private String reportDate;
     private String createdBy;
     private String createdOn;
+    private Bitmap bitmap;
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
 
     public String getId() {
         return id;

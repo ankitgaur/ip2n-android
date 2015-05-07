@@ -55,7 +55,7 @@
                     android:layout_height="40dp"
                     android:layout_weight="1"
                     android:background="@drawable/popup_bg"
-                    android:hint="12:00 AM"
+                    android:hint="@string/time_hint"
                     android:inputType="time"
                     android:paddingLeft="5dp" />
             </LinearLayout>

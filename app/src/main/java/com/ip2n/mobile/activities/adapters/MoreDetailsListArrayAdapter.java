@@ -104,7 +104,25 @@ public class MoreDetailsListArrayAdapter extends ArrayAdapter<Question> implemen
             convertView.findViewById(R.id.question_edittext_layout).setVisibility(View.VISIBLE);
             TextView questions = (TextView) convertView.findViewById(R.id.question_textview);
             questions.setText(question);
+            EditText et = (EditText)convertView.findViewById(R.id.answer_edittext);
+            et.setTag(position);
 
+            et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(!hasFocus) {
+                        EditText vet = (EditText)v;
+                        int key = (int) vet.getTag();
+                        ansmap.put(""+key,vet.getText().toString());
+                    }
+                }
+            });
+
+            quesmap.put(""+position,question);
+            if(ansmap.get(""+position)!=null)
+            {
+                et.setText(ansmap.get(""+position));
+            }
 
         } else {
             convertView.findViewById(R.id.question_layout).setVisibility(View.VISIBLE);

@@ -16,6 +16,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.ip2n.mobile.activities.NigeriaSendReportActivity;
 import com.ip2n.mobile.activities.NigeriaTimelineActivity;
 import com.ip2n.mobile.activities.adapters.MultipartRequest;
+import com.ip2n.mobile.asynctasks.ImageLoadTask;
 import com.ip2n.mobile.models.Incident;
 import com.ip2n.mobile.volley.AppController;
 
@@ -87,6 +88,9 @@ public class IncidentService {
                                 if (top < Long.parseLong(incident.getId())) {
                                     top = Long.parseLong(incident.getId());
                                 }
+
+                                //ImageLoadTask task = new ImageLoadTask(incident);
+                                //task.execute();
 
                                 Log.d(TAG, incident.getId());
                                 temp.add(incident);
@@ -168,7 +172,8 @@ public class IncidentService {
                                 incident.setStatus(resp.getString("status"));
                                 incident.setType(resp.getString("type"));
 
-
+                                //ImageLoadTask task = new ImageLoadTask(incident);
+                                //task.execute();
                                 Log.d(TAG, incident.getId());
                                 incidents.add(incident);
                             }
@@ -249,6 +254,9 @@ public class IncidentService {
                                 if (top < Long.parseLong(incident.getId())) {
                                     top = Long.parseLong(incident.getId());
                                 }
+
+                                //ImageLoadTask task = new ImageLoadTask(incident);
+                                //task.execute();
 
                                 Log.d(TAG, incident.getId());
                                 incidents.add(incident);
@@ -338,9 +346,14 @@ public class IncidentService {
                         Log.d(TAG + ".CREATE" + " Error.Response", error.getStackTrace().toString());
                         error.printStackTrace();
 
+                        Toast.makeText(context,
+                                "Your report could not be submitted",
+                                Toast.LENGTH_LONG).show();
+                        Intent i = new Intent(context, NigeriaTimelineActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(i);
 
                         // Log.d(TAG+".CREATE" + " Error.Response", error.);
-
 
                     }
                 }
@@ -378,7 +391,7 @@ public class IncidentService {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
-                        Log.d("IMAGEUPLOAD" + " Error.Response", error.toString());
+                        Log.d("IMAGEUPLOAD"," Error.Response"+ error.toString());
 
                     }
                 },
@@ -386,7 +399,7 @@ public class IncidentService {
 
                     @Override
                     public void onResponse(String s) {
-                        Log.d("IMAGEUPLOAD" + " Success.Response", s);
+                        Log.d("IMAGEUPLOAD", "Success.Response : "+ s);
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context).setTitle("Report Submitted")
                                 .setMessage("Report has been received with the selected image. We are looking into the matter!")
                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {

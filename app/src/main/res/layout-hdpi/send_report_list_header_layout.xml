@@ -54,7 +54,7 @@
                     android:layout_height="35dp"
                     android:layout_weight="1"
                     android:background="@drawable/popup_bg"
-                    android:hint="12:00 AM"
+                    android:hint="@string/time_hint"
                     android:inputType="time"
                     android:paddingLeft="2dp"
                     style="@style/answer_textview_style"/>

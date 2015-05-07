@@ -33,6 +33,7 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="next">Next</string>
+    <string name="time_hint">hh:mm</string>
 
 
 

@@ -28,13 +28,13 @@
     <ListView
         android:id="@+id/category_list_view"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="match_parent"
         android:layout_below="@+id/send_report_text"
         android:layout_marginTop="5dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="5dp"></ListView>
 
-    <TextView
+  <!--  <TextView
         android:id="@+id/send_report_text_footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,6 +42,6 @@
         android:layout_marginTop="5dp"
         android:text="@string/send_report_desc_footer"
         android:textSize="20dp"
-        android:textStyle="bold" />
+        android:textStyle="bold" />-->
 
 </RelativeLayout>

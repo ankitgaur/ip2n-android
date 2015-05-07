@@ -99,7 +99,7 @@ public class NigeriaTimelineActivity extends Activity implements View.OnClickLis
         intentFilter.addAction("pledge.nigeria.com.nigeriapldge.ENTERTAINMENT_BROADCAST");
         registerReceiver(myReceiver, intentFilter);
         if (buttonClicked != 2 && buttonClicked != 3) {
-            if(incidentsArrayList == null)
+            if(incidentsArrayList != null)
                 IncidentService.getSingleton().getLatest(mContext);
             else
                 IncidentService.getSingleton().get(mContext);
