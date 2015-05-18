@@ -169,9 +169,10 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
         moreDetailsListView = (ListView) findViewById(R.id.more_details_listview);
         LayoutInflater inflater = ((Activity) this).getLayoutInflater();
         View convertView = inflater.inflate(R.layout.send_report_list_header_layout, null, false);
-        initHeaderLayout(convertView);
-
-        moreDetailsListView.addHeaderView(convertView);
+        if (moreDetailsListView.getHeaderViewsCount() <= 0) {
+            initHeaderLayout(convertView);
+            moreDetailsListView.addHeaderView(convertView);
+        }
         moreDetailsListArrayAdapter = new MoreDetailsListArrayAdapter(mContext, R.layout.viewpager_item, questionList);
 
         moreDetailsListView.setAdapter(moreDetailsListArrayAdapter);
@@ -301,9 +302,8 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
                 } else if (filemanagerstring != null) {
                     filePath = filemanagerstring;
                 } else {
-                    Toast.makeText(getApplicationContext(), "Unknown path",
-                            Toast.LENGTH_LONG).show();
-                    Log.e("Bitmap", "Unknown path");
+                    showErrorDialog();
+
                 }
 
                 if (filePath != null) {
@@ -311,14 +311,25 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
                     if (file.exists()) {
                         IncidentService.getSingleton().uploadFile("incident_image", file, mContext, incidentID);
                     }
+                    else{
+                        showErrorDialog();
+                    }
                     // decodeFile(filePath);
                 } else {
+                    Log.i("Kritika","Image Error Bitmap null!!!");
+
                     bitmap = null;
+                    showErrorDialog();
+
                 }
             } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "Image cannot be uploaded.",
-                        Toast.LENGTH_LONG).show();
+                Log.i("Kritika","Image Error!!!");
+                showErrorDialog();
             }
+        }
+        else{
+            showErrorDialog();
+
         }
 
 
@@ -403,6 +414,7 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent i = new Intent(mContext, NigeriaTimelineActivity.class);
+                                i.putExtra("add_new_incident",true);
                                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
                                 mContext.startActivity(i);
@@ -413,6 +425,24 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
         });
         dialog.show();
     }
+
+    private void showErrorDialog(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext).setTitle("Report Submitted")
+                .setMessage("There was some error in uploading the image, report has been received. We are looking into the matter!")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent i = new Intent(mContext, NigeriaTimelineActivity.class);
+                        i.putExtra("add_new_incident",true);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                        mContext.startActivity(i);
+                    }
+                });
+        alertDialogBuilder.create().show();
+    }
+
+
 
     public void initHeaderLayout(View convertView) {
         RelativeLayout stateLayout = (RelativeLayout) convertView.findViewById(R.id.state_layout);
@@ -597,6 +627,18 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if(stateEditText.getText().toString().isEmpty()){
+            stateEditText.setVisibility(View.GONE);
+        }
+        else {
+            stateEditText.setVisibility(View.VISIBLE);
+        }
+        if(govtEditText.getText().toString().isEmpty()){
+            govtEditText.setVisibility(View.GONE);
+        }
+        else {
+            govtEditText.setVisibility(View.VISIBLE);
+        }
         if (dateEditText == null || timeEditText == null || stateEditText == null || govtEditText == null) {
             return;
         } else {
@@ -646,18 +688,15 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
             public void onClick(DialogInterface dialog, int item) {
                 switch (id){
                     case 1:
-                        stateEditText.setVisibility(View.VISIBLE);
                         stateEditText.setText(items[item]);
                         String state = stateEditText.getText().toString();
                         State st = StateService.getStateByName(state);
                         if (st != null) {
                             String currGovt = st.getCurrGovt();
-                            govtEditText.setVisibility(View.VISIBLE);
                             govtEditText.setText(currGovt);
                         }
                         break;
                     case 2:
-                        govtEditText.setVisibility(View.VISIBLE);
                         govtEditText.setText(items[item]);
                         break;
 

@@ -392,6 +392,20 @@ public class IncidentService {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         Log.d("IMAGEUPLOAD"," Error.Response"+ error.toString());
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context).setTitle("Report Submitted")
+                                .setMessage("There was some error in uploading the image, report has been received. We are looking into the matter!")
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        Intent i = new Intent(context, NigeriaTimelineActivity.class);
+                                        i.putExtra("add_new_incident",true);
+                                        context.startActivity(i);
+                                    }
+                                });
+                        alertDialogBuilder.create().show();
+
+
 
                     }
                 },
@@ -407,7 +421,7 @@ public class IncidentService {
                                     public void onClick(DialogInterface dialog, int which) {
 
                                         Intent i = new Intent(context, NigeriaTimelineActivity.class);
-
+                                        i.putExtra("add_new_incident",true);
                                         context.startActivity(i);
                                     }
                                 });

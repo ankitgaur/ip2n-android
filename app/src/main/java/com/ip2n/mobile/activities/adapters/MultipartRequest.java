@@ -1,6 +1,7 @@
 package com.ip2n.mobile.activities.adapters;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -56,6 +57,8 @@ public class MultipartRequest extends Request<String> {
         try {
             entity.setCharset(CharsetUtils.get("UTF-8"));
         } catch (UnsupportedEncodingException e) {
+            Log.i("Kritika", "Multipart request error!!!");
+
             e.printStackTrace();
         }
         buildMultipartEntity();
@@ -104,12 +107,10 @@ public class MultipartRequest extends Request<String> {
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
 
         try {
-//          System.out.println("Network Response "+ new String(response.data, "UTF-8"));
             return Response.success(new String(response.data, "UTF-8"),
                     getCacheEntry());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-            // fuck it, it should never happen though
             return Response.success(new String(response.data), getCacheEntry());
         }
     }
