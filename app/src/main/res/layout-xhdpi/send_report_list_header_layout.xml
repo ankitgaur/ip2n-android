@@ -173,48 +173,7 @@
             android:layout_below="@+id/govtEditText"
             android:background="@color/submit_button_color" />
 
-        <LinearLayout
-            android:id="@+id/desc_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/govt_divider_view"
-            android:layout_marginTop="5dp"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="5dp">
 
-            <TextView
-                style="@style/question_textview_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Description" />
-
-            <EditText
-                android:id="@+id/description_edittext"
-                style="@style/answer_textview_style"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_below="@+id/timeEditText"
-                android:layout_marginTop="2dp"
-                android:background="@drawable/popup_bg"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="left|top"
-                android:hint="80 character limit"
-                android:maxLength="80"
-                android:padding="2dp" />
-
-        </LinearLayout>
-
-        <View
-            android:id="@+id/desc_divider_view"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/desc_layout"
-            android:layout_marginTop="10dp"
-            android:background="@color/submit_button_color"></View>
 
     </RelativeLayout>
 </RelativeLayout>

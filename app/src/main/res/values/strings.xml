@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Ipledge2Nigeria</string>
+    <string name="app_name">Citizen X</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_nigeria_category">NigeriaCategoryActivity</string>
@@ -9,7 +9,7 @@
     <string name="pwd_hint">Password</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
-    <string name="send_report_desc_header">Send us your report and be part of the re-engineering process by simply clicking on the relevant category.</string>
+    <string name="send_report_desc_header">Dear Patriot, kindly send us your report and be part of the re -engineering process by simply clicking on the relevant category...</string>
     <string name="send_report_desc_footer">With statistics we will create an environment for transparency, accountability, re-engineering, re-orientation and re-branding.</string>
     <string name="title_activity_nigeria_send_report">NigeriaSendReportActivity</string>
     <string name="title_activity_main">MainActivity</string>
@@ -30,8 +30,8 @@
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
     <string name="incidents_instruction_text">Hold and pull down for latest incidents</string>
     <string name="news_instruction_text">Click on an article to read more.</string>
-    <string name="cancel">Cancel</string>
-    <string name="save">Save</string>
+    <string name="cancel">CANCEL</string>
+    <string name="save">SUBMIT</string>
     <string name="next">Next</string>
     <string name="time_hint">hh:mm</string>
 

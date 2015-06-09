@@ -2,17 +2,13 @@ package com.ip2n.mobile.activities.adapters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -23,7 +19,6 @@ import android.widget.TextView;
 
 import com.ip2n.mobile.R;
 import com.ip2n.mobile.activities.DataTransferInterface;
-import com.ip2n.mobile.models.JosContent;
 import com.ip2n.mobile.models.Question;
 
 
@@ -32,12 +27,8 @@ import org.json.JSONObject;
 
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -78,6 +69,7 @@ public class MoreDetailsListArrayAdapter extends ArrayAdapter<Question> implemen
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+        Log.i("Kritika","position : "+position);
 
 
         if (convertView == null) {
@@ -86,8 +78,11 @@ public class MoreDetailsListArrayAdapter extends ArrayAdapter<Question> implemen
             convertView = inflater.inflate(layoutResourceId, parent, false);
         }
 
+        Log.d("Ankit521","element at pos " + position);
+        Log.d("Ankit521","size " + questionArrayList.size());
 
-        String question = questionArrayList.get(position).getName();
+        Log.d("Ankit521",""+questionArrayList.get(position));
+        String question = questionArrayList.get(position).getQuestion();
         answerOptions = questionArrayList.get(position).getOptions();
 
 
@@ -99,7 +94,7 @@ public class MoreDetailsListArrayAdapter extends ArrayAdapter<Question> implemen
 
 
 
-        if (answerOptions.size() == 0) {
+        if (answerOptions==null || answerOptions.size() == 0) {
             convertView.findViewById(R.id.question_layout).setVisibility(View.GONE);
             convertView.findViewById(R.id.question_edittext_layout).setVisibility(View.VISIBLE);
             TextView questions = (TextView) convertView.findViewById(R.id.question_textview);
@@ -226,7 +221,7 @@ public class MoreDetailsListArrayAdapter extends ArrayAdapter<Question> implemen
                 Question ques = questionArrayList.get(key);
                 String[] answers = new String[ques.getOptions().size()];
                 ques.getOptions().toArray(answers);
-                showOptions(answers, "Select " + ques.getName(), MORE_INFO_DIALOG, key);
+                showOptions(answers, "Select " + ques.getQuestion(), MORE_INFO_DIALOG, key);
                 break;
 
         }

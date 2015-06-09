@@ -415,7 +415,7 @@ public class IncidentService {
                     public void onResponse(String s) {
                         Log.d("IMAGEUPLOAD", "Success.Response : "+ s);
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context).setTitle("Report Submitted")
-                                .setMessage("Report has been received with the selected image. We are looking into the matter!")
+                                .setMessage("Thanks for your valuable feedback! Your report with the selected image will form part of our analysis on www.ipledge2nigeria.com.")
                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {

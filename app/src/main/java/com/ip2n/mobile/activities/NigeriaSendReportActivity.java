@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
@@ -43,7 +42,6 @@ import android.view.View;
 import android.view.Window;
 
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -61,6 +59,7 @@ import com.ip2n.mobile.models.State;
 import com.ip2n.mobile.services.IncidentService;
 import com.ip2n.mobile.services.StateService;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,11 +67,15 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -98,7 +101,7 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
     private EditText timeEditText;
     private TextView stateEditText;
     private TextView govtEditText;
-    private EditText descEditText;
+    //private EditText descEditText;
     private MoreDetailsListArrayAdapter moreDetailsListArrayAdapter;
     private Calendar myCalendar = Calendar.getInstance();
     private DatePickerDialog.OnDateSetListener date;
@@ -115,6 +118,7 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
         String questions = getIntent().getStringExtra("questions");
         this.type = getIntent().getStringExtra("type");
         questionList = getQuestionMap(questions);
+        Log.i("Kritika","Question List : "+questionList);
 
     }
 
@@ -232,6 +236,8 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
     private void sendReport() throws JSONException {
         JSONObject obj = moreDetailsListArrayAdapter.getJson();
 
+        Log.d("Ankit523",obj.toString());
+
         JSONObject json = new JSONObject();
 
         //put createdOn
@@ -260,8 +266,8 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
         json.put("govt", govt);
 
         //put description
-        String description = descEditText.getText().toString();
-        json.put("description", description);
+        //String description = descEditText.getText().toString();
+        json.put("description", obj.getString("Brief Description"));
 
         //put questions
         json.put("questions", obj.toString());
@@ -351,37 +357,55 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
 
 
     public static ArrayList<Question> getQuestionMap(String questions) {
-        ArrayList<Question> quest = new ArrayList<Question>();
+        ArrayList<Question> quest = null;
         //quest.add(null);
-
-        InputStreamReader ireader = new InputStreamReader(new ByteArrayInputStream(questions.getBytes()));
-
-        JsonReader reader = new JsonReader(ireader);
-
+        Log.d("Ankit521",questions);
         try {
-            reader.beginObject();
-            while (reader.hasNext()) {
-                Question q = new Question();
+            JSONArray arr = new JSONArray(questions);
+            if(arr!=null){
+                int count = arr.length();
+                Log.d("Ankit521","size : "+count);
+                quest = new ArrayList<Question>();
+                for(int x=0;x<count;x++){
+                    JSONObject obj = arr.getJSONObject(x);
+                    Question q = new Question();
+                    q.setQuestion(obj.getString("question"));
+                    q.setOrder(obj.getInt("order"));
+                    q.setRequired(obj.getBoolean("required"));
+                    Log.d("Ankit521",""+q.getQuestion());
+                    String tmp = obj.getString("options");
+                    Log.d("Ankit521","checking tmp is null");
+                    if(tmp!=null && !tmp.isEmpty() && !tmp.equals("null"))
+                    {
+                        Log.d("Ankit521",tmp);
+                        JSONArray opns = new JSONArray(tmp);
+                        ArrayList<String> options = new ArrayList<String>();
+                        for (int i = 0; i < opns.length(); i++) {
 
-                q.setName(reader.nextName());
-                List<String> options = new ArrayList<String>();
-                if (reader.peek() != JsonToken.NULL) {
-                    reader.beginArray();
-                    while (reader.hasNext()) {
-                        options.add(reader.nextString());
+                            options.add(opns.getString(i));
+                        }
+                        q.setOptions(options);
+
                     }
-                    reader.endArray();
-                } else {
-                    reader.nextNull();
-                }
-                q.setOptions(options);
-                quest.add(q);
-            }
-            reader.endObject();
+                    Log.d("Ankit521",""+q);
 
-        } catch (IOException e) {
+                    quest.add(q);
+                }
+            }
+
+        } catch (JSONException e) {
             e.printStackTrace();
+            Log.d("Ankit521",e.getMessage());
         }
+
+        Collections.sort(quest, new Comparator<Question>() {
+
+            @Override
+            public int compare(Question lhs, Question rhs) {
+                return 0;
+            }
+        });
+        Log.d("Ankit521","Returning Array of size "+quest.size());
         return quest;
     }
 
@@ -409,7 +433,7 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext).setTitle("Report Submitted")
-                        .setMessage("Report has been received. We are looking into the matter!")
+                        .setMessage("Thanks for your valuable feedback! Your report will form part of our analysis on www.ipledge2nigeria.com. ")
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -456,9 +480,9 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
 
         stateArrowImageView.setOnClickListener(this);
         govtArrowImageView.setOnClickListener(this);
-        if (descEditText == null) {
-            descEditText = (EditText) convertView.findViewById(R.id.description_edittext);
-        }
+        //if (descEditText == null) {
+        //    descEditText = (EditText) convertView.findViewById(R.id.description_edittext);
+        //}
 
 
 
