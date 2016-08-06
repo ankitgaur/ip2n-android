@@ -66,7 +66,7 @@
         <View
             android:id="@+id/date_divider_view"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="1dp"
             android:layout_below="@+id/date_time_layout"
             android:layout_marginTop="12dp"
             android:background="@color/submit_button_color"></View>
@@ -111,13 +111,13 @@
             android:paddingLeft="8dp"
             android:paddingTop="2dp"
             android:paddingBottom="10dp"
-            style="@style/answer_textview_style"
+            style="@style/answer_textview_spinner_style"
             android:visibility="gone" />
 
         <View
             android:id="@+id/state_divider_view"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="1dp"
             android:layout_below="@+id/stateEditText"
             android:background="@color/submit_button_color" />
 
@@ -163,13 +163,13 @@
             android:paddingLeft="8dp"
             android:paddingTop="2dp"
             android:paddingBottom="10dp"
-            style="@style/answer_textview_style"
+            style="@style/answer_textview_spinner_style"
             android:visibility="gone" />
 
         <View
             android:id="@+id/govt_divider_view"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="1dp"
             android:layout_below="@+id/govtEditText"
             android:background="@color/submit_button_color" />
 

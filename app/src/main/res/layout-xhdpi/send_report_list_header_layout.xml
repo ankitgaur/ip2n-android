@@ -104,7 +104,7 @@
 
         <TextView
             android:id="@+id/stateEditText"
-            style="@style/answer_textview_style"
+            style="@style/answer_textview_spinner_style"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_below="@+id/state_layout"
@@ -156,7 +156,7 @@
 
         <TextView
             android:id="@+id/govtEditText"
-            style="@style/answer_textview_style"
+            style="@style/answer_textview_spinner_style"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_below="@+id/govt_layout"

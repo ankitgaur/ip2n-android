@@ -193,7 +193,6 @@ public class IncidentListArrayAdapter extends ArrayAdapter<Incident> {
         }
 
         protected void onPostExecute(Bitmap bitmap) {
-            Log.i("Kritika","Post execute");
 
             if (imageViewReference != null) {
                 final ImageView imageView = imageViewReference.get();

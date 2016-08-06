@@ -13,6 +13,7 @@
         android:id="@+id/logo"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@color/black"
         android:src="@drawable/logo"></ImageView>
 
     <TextView
@@ -23,7 +24,8 @@
         android:layout_marginTop="25dp"
         android:text="@string/send_report_desc_header"
         android:textSize="22dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/white"/>
 
     <ListView
         android:id="@+id/category_list_view"
@@ -31,8 +33,8 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/send_report_text"
         android:layout_marginTop="10dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="8dp"></ListView>
+        android:divider="@color/x_icon_green"
+        android:dividerHeight="2dp"></ListView>
 
   <!--  <TextView
         android:id="@+id/send_report_text_footer"

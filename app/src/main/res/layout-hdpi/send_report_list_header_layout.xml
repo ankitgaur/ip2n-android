@@ -111,7 +111,7 @@
             android:paddingTop="2dp"
             android:paddingBottom="8dp"
             android:visibility="gone"
-            style="@style/answer_textview_style"/>
+            style="@style/answer_textview_spinner_style"/>
 
 
         <View
@@ -163,7 +163,7 @@
             android:paddingTop="2dp"
             android:paddingBottom="8dp"
             android:visibility="gone"
-            style="@style/answer_textview_style"/>
+            style="@style/answer_textview_spinner_style"/>
 
 
         <View

@@ -51,7 +51,7 @@
 
     <style name="question_textview_style">
         <item name="android:textSize">18dp</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/white</item>
 
     </style>
 
@@ -60,5 +60,11 @@
         <item name="android:textColor">@color/category_textview_color</item>
 
     </style>
+    <style name="answer_textview_spinner_style">
+        <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/white</item>
+
+    </style>
+
 
 </resources>

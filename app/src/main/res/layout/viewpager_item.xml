@@ -60,7 +60,7 @@
                 android:paddingBottom="3dp"
                 android:background="@drawable/timeline_bg"
                 android:visibility="gone"
-                style="@style/answer_textview_style"/>
+                style="@style/answer_textview_spinner_style"/>
 
             <View
                 android:id="@+id/question_option_divider_view"

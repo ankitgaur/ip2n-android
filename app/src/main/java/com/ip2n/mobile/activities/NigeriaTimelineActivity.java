@@ -99,7 +99,7 @@ public class NigeriaTimelineActivity extends Activity implements View.OnClickLis
         intentFilter.addAction("pledge.nigeria.com.nigeriapldge.ENTERTAINMENT_BROADCAST");
         registerReceiver(myReceiver, intentFilter);
         if (buttonClicked != 2 && buttonClicked != 3) {
-            if(incidentsArrayList != null || getIntent().getBooleanExtra("add_new_incident",false))
+            if(getIntent().getBooleanExtra("add_new_incident",false))
                 IncidentService.getSingleton().getLatest(mContext);
             else
                 IncidentService.getSingleton().get(mContext);
@@ -286,12 +286,12 @@ public class NigeriaTimelineActivity extends Activity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.report_incident_button:
+                buttonClicked = 1;
                 if(!(reportIncidentClickCount>0)) {
                     new StateService().fetch(this);
                     new IncidentCategoryService().getAll(this);
                 }
                 reportIncidentClickCount++;
-                buttonClicked = 1;
                 break;
             case R.id.feed_button:
 

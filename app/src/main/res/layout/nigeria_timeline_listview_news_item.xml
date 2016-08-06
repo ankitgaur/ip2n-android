@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:paddingLeft="5dp"
-        android:textColor="@color/black"
+        android:textColor="@color/nigeria_green"
         android:textSize="13dp"
         android:textStyle="bold" />
 

@@ -13,18 +13,18 @@
         android:id="@+id/logo"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/logo"></ImageView>
+        android:background="@color/black"
+        android:src="@drawable/logo_category"></ImageView>
 
     <TextView
         android:id="@+id/send_report_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/logo"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:text="@string/send_report_desc_header"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:textColor="@color/category_textview_color"/>
+        android:textSize="19dp"
+        android:textColor="@color/submit_button_color"/>
 
     <ListView
         android:id="@+id/category_list_view"
@@ -32,8 +32,8 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/send_report_text"
         android:layout_marginTop="5dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="7dp"></ListView>
+        android:divider="@color/x_icon_green"
+        android:dividerHeight="1dp"></ListView>
 
    <!-- <TextView
         android:id="@+id/send_report_text_footer"

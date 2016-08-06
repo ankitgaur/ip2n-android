@@ -16,7 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_alignParentTop="true"
-            android:background="@color/nigeria_green"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -36,7 +35,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="39dp"
-                android:background="@color/timeline_background_color" />
+                android:background="@color/nigeria_green" />
 
             <Button
                 android:id="@+id/entertainment_button"
@@ -54,7 +53,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="39dp"
-                android:background="@color/timeline_background_color" />
+                android:background="@color/nigeria_green" />
 
             <Button
                 android:id="@+id/news_button"
@@ -97,7 +96,6 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/nigeria_green"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -117,7 +115,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="39dp"
-                android:background="#9cc39c" />
+                android:background="@color/nigeria_green" />
 
             <Button
                 android:id="@+id/report_incident_button"
@@ -136,7 +134,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="39dp"
-                android:background="#9cc39c" />
+                android:background="@color/nigeria_green" />
 
             <Button
                 android:id="@+id/sign_out_button"
