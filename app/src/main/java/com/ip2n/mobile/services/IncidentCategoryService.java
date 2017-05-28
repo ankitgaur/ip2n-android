@@ -34,7 +34,7 @@ public class IncidentCategoryService {
     public void getAll(final Context context) {
 
 
-        String url = "http://ipledge2nigeria.com/service/incidentTypes";
+        String url = "http://dev.insodel.com/api/incidentTypes";
         JsonArrayRequest req = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -94,7 +94,7 @@ public class IncidentCategoryService {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 SharedPreferences prefs = context.getSharedPreferences("NIGERIA_PLEDGE", 0);
 
-                headers.put("Authorization", prefs.getString("NIGERIA_LOGIN_KEY", ""));
+                headers.put("Authorization", prefs.getString("NIGERIA_LOGIN_TOKEN", ""));
                 return headers;
             }
         };

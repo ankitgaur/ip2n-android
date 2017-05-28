@@ -7,9 +7,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.ip2n.mobile.activities.NigeriaTimelineActivity;
 import com.ip2n.mobile.models.JosContent;
@@ -30,14 +32,26 @@ public class LoginService {
 
     public static void login(final Context context) {
 
-        String url = "http://ipledge2nigeria.com/service/" + "login";
+        String url = "http://dev.insodel.com/api/" + "login";
 
-        StringRequest req = new StringRequest(url,
-                new Response.Listener<String>() {
+        SharedPreferences prefs = context.getSharedPreferences("NIGERIA_PLEDGE", 0);
+
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET,url,null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONObject response) {
                         Intent i = new Intent(context, NigeriaTimelineActivity.class);
+                        try{
+                            String token = response.get("token").toString();
+                            //Log.i("Ankit",""+token);
+                            SharedPreferences mSharedPrefs = context.getSharedPreferences("NIGERIA_PLEDGE", 0);
+                            SharedPreferences.Editor editor = mSharedPrefs.edit();
+                            editor.putString("NIGERIA_LOGIN_TOKEN","Bearer " + token);
+                            editor.commit();
+                        }
+                        catch(Exception e){
 
+                        }
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(i);
                     }
@@ -56,6 +70,8 @@ public class LoginService {
                 SharedPreferences prefs = context.getSharedPreferences("NIGERIA_PLEDGE", 0);
 
                 headers.put("Authorization", prefs.getString("NIGERIA_LOGIN_KEY", ""));
+
+
                 return headers;
             }
         };

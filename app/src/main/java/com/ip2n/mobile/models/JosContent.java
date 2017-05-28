@@ -3,12 +3,12 @@ package com.ip2n.mobile.models;
 /**
  * Created by kritika_pathak on 2/21/2015.
  */
-public class JosContent {
+public class JosContent implements Comparable<JosContent> {
 
     private String id;
     private String title;
-    private String created;
-    private String alias;
+    private long created;
+    private String createdStr;
     private String introtext;
     private String user;
     private String url;
@@ -46,22 +46,6 @@ public class JosContent {
         this.title = title;
     }
 
-    public String getCreated() {
-        return created;
-    }
-
-    public void setCreated(String created) {
-        this.created = created;
-    }
-
-    public String getAlias() {
-        return alias;
-    }
-
-    public void setAlias(String alias) {
-        this.alias = alias;
-    }
-
     public String getIntrotext() {
         return introtext;
     }
@@ -76,5 +60,42 @@ public class JosContent {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JosContent that = (JosContent) o;
+
+        return id != null ? id.equals(that.id) : that.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public int compareTo(JosContent josContent) {
+        return 0;
+    }
+
+    public long getCreated() {
+        return created;
+    }
+
+    public void setCreated(long created) {
+        this.created = created;
+    }
+
+    public String getCreatedStr() {
+        return createdStr;
+    }
+
+    public void setCreatedStr(String createdStr) {
+        this.createdStr = createdStr;
     }
 }

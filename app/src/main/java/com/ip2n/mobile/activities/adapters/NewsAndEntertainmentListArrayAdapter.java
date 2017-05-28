@@ -69,11 +69,10 @@ public class NewsAndEntertainmentListArrayAdapter extends ArrayAdapter<JosConten
 
         String fdate = "";
         try {
-            Date dt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(objectItem.getCreated());
-            fdate = new SimpleDateFormat("dd MMM yyyy").format(dt);
+            Date dt = new Date(objectItem.getCreated());
             fdate = fdate + " at ";
             fdate = fdate + new SimpleDateFormat("HH:mm").format(dt);
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Log.i("Kritika", "Error" + e.toString());
 

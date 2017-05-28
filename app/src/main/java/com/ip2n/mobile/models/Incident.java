@@ -1,11 +1,14 @@
 package com.ip2n.mobile.models;
 
 import android.graphics.Bitmap;
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
 
 /**
  * Created by kritika_pathak on 4/8/2015.
  */
-public class Incident {
+public class Incident implements Comparable<Incident>{
 
     private String id;
     private String image;
@@ -19,6 +22,28 @@ public class Incident {
     private String createdBy;
     private String createdOn;
     private Bitmap bitmap;
+    private long created;
+
+    @Override
+    public int compareTo(Incident i) {
+
+        // descending order (ascending order would be:
+        // o1.getGrade()-o2.getGrade())
+        long diff = i.getCreated() - this.getCreated();
+
+        if(diff>0L){
+            //Log.i("Kritika sorted : ",i.getCreated()+":"+this.getCreated()+":"+"1");
+            return 1;
+
+        }
+        if(diff<0L){
+           // Log.i("Kritika sorted : ",i.getCreated()+":"+this.getCreated()+":"+"-1");
+            return -1;
+        }
+
+        //Log.i("Kritika sorted : ",i.getCreated()+":"+this.getCreated()+":"+"0");
+        return 0;
+    }
 
     public Bitmap getBitmap() {
         return bitmap;
@@ -115,5 +140,29 @@ public class Incident {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Incident incident = (Incident) o;
+
+        return id.equals(incident.id);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    public long getCreated() {
+        return created;
+    }
+
+    public void setCreated(long created) {
+        this.created = created;
     }
 }

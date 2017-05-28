@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.ip2n.mobile.IncidentComparator;
 import com.ip2n.mobile.R;
 import com.ip2n.mobile.activities.adapters.IncidentListArrayAdapter;
 import com.ip2n.mobile.activities.adapters.NewsAndEntertainmentListArrayAdapter;
@@ -36,8 +37,8 @@ import com.ip2n.mobile.services.NewsService;
 import com.ip2n.mobile.services.StateService;
 
 import java.util.ArrayList;
-
-
+import java.util.Collection;
+import java.util.Collections;
 
 
 public class NigeriaTimelineActivity extends Activity implements View.OnClickListener {
@@ -265,15 +266,15 @@ public class NigeriaTimelineActivity extends Activity implements View.OnClickLis
             if (buttonClicked == 2 && !loadMoreEntertainment) {
                 Log.i("Ankit", "Change Load Entertainment : " + loadMoreEntertainment);
                 loadMoreEntertainment = true;
-                EntertainmentService.getSingleton().getMore(mContext);
+                //EntertainmentService.getSingleton().getMore(mContext);
                 loadMore = false;
             } else if (buttonClicked == 3 && !loadMoreNews) {
                 loadMoreNews = true;
-                NewsService.getSingleton().getMore(mContext);
+                //NewsService.getSingleton().getMore(mContext);
                 loadMore = false;
             } else if (!loadMoreIncidents) {
                 loadMoreIncidents = true;
-                IncidentService.getSingleton().getMore(mContext);
+                //IncidentService.getSingleton().getMore(mContext);
                 loadMore = false;
             }
 
@@ -368,7 +369,8 @@ public class NigeriaTimelineActivity extends Activity implements View.OnClickLis
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equalsIgnoreCase("pledge.nigeria.com.nigeriapldge.NEWS_BROADCAST")) {
                 if (!loadMoreNews) {
-                    newsArrayList = NewsService.getSingleton().getNews();
+                    newsArrayList = new ArrayList<JosContent>();
+                    newsArrayList.addAll(NewsService.getSingleton().getNews());
                     newsAndEntertainmentListArrayAdapter = new NewsAndEntertainmentListArrayAdapter(mContext, R.layout.nigeria_timeline_listview_news_item, newsArrayList);
                     initListView(newsAndEntertainmentListArrayAdapter);
                 } else {
@@ -386,7 +388,8 @@ public class NigeriaTimelineActivity extends Activity implements View.OnClickLis
             } else if (intent.getAction().equalsIgnoreCase("pledge.nigeria.com.nigeriapldge.ENTERTAINMENT_BROADCAST")) {
                 if (!loadMoreEntertainment) {
 
-                    entertainmentArrayList = EntertainmentService.getSingleton().getEntertainment();
+                    entertainmentArrayList = new ArrayList<JosContent>();
+                    entertainmentArrayList.addAll(EntertainmentService.getSingleton().getEntertainment());
 
                     newsAndEntertainmentListArrayAdapter = new NewsAndEntertainmentListArrayAdapter(mContext, R.layout.nigeria_timeline_listview_news_item, entertainmentArrayList);
 
@@ -409,8 +412,12 @@ public class NigeriaTimelineActivity extends Activity implements View.OnClickLis
             } else if (intent.getAction().equalsIgnoreCase("pledge.nigeria.com.nigeriapldge.INCIDENTS_BROADCAST")) {
                 if (!loadMoreIncidents) {
 
-                    incidentsArrayList = IncidentService.getSingleton().getIncidents();
-                    Log.i("Kritika","incidentsArrayList :"+incidentsArrayList.size());
+                    incidentsArrayList = new ArrayList<>();
+
+                    incidentsArrayList.addAll(IncidentService.getSingleton().getIncidents());
+
+                    //Collections.sort(incidentsArrayList,new IncidentComparator());
+                    Log.i("Kritika sorted","incidentsArrayList :"+incidentsArrayList.size());
 
                     incidentListArrayAdapter = new IncidentListArrayAdapter(mContext, R.layout.nigeria_timeline_listview_item, incidentsArrayList);
 

@@ -23,6 +23,8 @@ import org.jsoup.nodes.Element;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by kritika_pathak on 4/8/2015.
@@ -32,9 +34,10 @@ public class NewsService {
 
     private static String TAG = "NewsService";
     private static NewsService singleton = null;
-    private ArrayList<JosContent> news = new ArrayList<JosContent>();
+    private Set<JosContent> news = new TreeSet<JosContent>();
     private int page = 0;
     private int size = 10;
+    private int limit = 100;
     private long top = 0;
 
     public NewsService() {
@@ -50,7 +53,7 @@ public class NewsService {
 
     public void getLatest(final Context context) {
 
-        String url = "http://ipledge2nigeria.com/service/" + "news/latest/" + top;
+        String url = "http://dev.insodel.com/api/" + "articles/headlines/" + limit;
 
         JsonArrayRequest req = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
@@ -60,7 +63,7 @@ public class NewsService {
 
                         //categories = new ArrayList<String>();
                         //Intent i = new Intent();
-                        ArrayList<JosContent> temp = new ArrayList<JosContent>();
+                        Set<JosContent> temp = new TreeSet<JosContent>();
                         try {
                             for (int x = 0; x < response.length(); x++) {
 
@@ -69,14 +72,14 @@ public class NewsService {
                                 JosContent content = new JosContent();
                                 content.setTitle(resp.getString("title"));
                                 content.setId(resp.getString("id"));
-                                content.setAlias(resp.getString("alias"));
-                                content.setCreated(resp.getString("created"));
-                                content.setUser(resp.getString("user"));
-                                content.setUrl("http://www.ipledge2nigeria.com/index.php?option=com_content&view=article&id=" + content.getId());
-                                content.setImg(getImage(resp.getString("introtext")));
-                                if(top < Long.parseLong(content.getId())){
-                                    top = Long.parseLong(content.getId());
-                                }
+                                content.setCreated(resp.getLong("createdOn"));
+                                content.setUser(resp.getString("author"));
+                                content.setCreatedStr(resp.getString("createdOnStr"));
+
+                                //content.setUrl("http://www.ipledge2nigeria.com/index.php?option=com_content&view=article&id=" + content.getId());
+                                String img = resp.getString("displayImage");
+                                content.setImg(img);
+                                content.setIntrotext(resp.getString("intro"));
 
                                 Log.d(TAG, content.getTitle());
                                 temp.add(content);
@@ -117,7 +120,7 @@ public class NewsService {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 SharedPreferences prefs = context.getSharedPreferences("NIGERIA_PLEDGE", 0);
 
-                headers.put("Authorization", prefs.getString("NIGERIA_LOGIN_KEY", ""));
+                headers.put("Authorization", prefs.getString("NIGERIA_LOGIN_TOKEN", ""));
                 return headers;
             }
         };
@@ -127,7 +130,7 @@ public class NewsService {
 
     public void getMore(final Context context) {
 
-        String url = "http://ipledge2nigeria.com/service/" + "news/" + page + "/" + size;
+        String url = "http://dev.insodel.com/api/" + "articles/headlines/" + limit;
         page = page + size;
         JsonArrayRequest req = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
@@ -142,11 +145,14 @@ public class NewsService {
                                 JosContent content = new JosContent();
                                 content.setTitle(resp.getString("title"));
                                 content.setId(resp.getString("id"));
-                                content.setAlias(resp.getString("alias"));
-                                content.setCreated(resp.getString("created"));
-                                content.setUser(resp.getString("user"));
-                                content.setUrl("http://www.ipledge2nigeria.com/index.php?option=com_content&view=article&id=" + content.getId());
-                                content.setImg(getImage(resp.getString("introtext")));
+                                content.setCreated(resp.getLong("createdOn"));
+                                content.setUser(resp.getString("author"));
+                                content.setCreatedStr(resp.getString("createdOnStr"));
+
+                                //content.setUrl("http://www.ipledge2nigeria.com/index.php?option=com_content&view=article&id=" + content.getId());
+                                String img = resp.getString("displayImage");
+                                content.setImg(img);
+                                content.setIntrotext(resp.getString("intro"));
 
 
                                 Log.d(TAG, content.getTitle());
@@ -182,7 +188,7 @@ public class NewsService {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 SharedPreferences prefs = context.getSharedPreferences("NIGERIA_PLEDGE", 0);
 
-                headers.put("Authorization", prefs.getString("NIGERIA_LOGIN_KEY", ""));
+                headers.put("Authorization", prefs.getString("NIGERIA_LOGIN_TOKEN", ""));
                 return headers;
             }
         };
@@ -193,7 +199,7 @@ public class NewsService {
 
     public void get(final Context context) {
 
-        String url = "http://ipledge2nigeria.com/service/" + "news/" + page + "/" + size;
+        String url = "http://dev.insodel.com/api/" + "articles/headlines/" + limit;
         page = page + size;
         JsonArrayRequest req = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
@@ -215,17 +221,14 @@ public class NewsService {
                                 JosContent content = new JosContent();
                                 content.setTitle(resp.getString("title"));
                                 content.setId(resp.getString("id"));
-                                content.setAlias(resp.getString("alias"));
-                                content.setCreated(resp.getString("created"));
-                                content.setUser(resp.getString("user"));
-                                content.setUrl("http://www.ipledge2nigeria.com/index.php?option=com_content&view=article&id=" + content.getId());
-                                content.setImg(getImage(resp.getString("introtext")));
-                                //incident.setDescription(resp.getString("description"));
-                                //incident.setCreatedOn(resp.getString("created_on"));
-                                //incident.setUserName("Kritika");
-                                if(top < Long.parseLong(content.getId())){
-                                    top = Long.parseLong(content.getId());
-                                }
+                                content.setCreated(resp.getLong("createdOn"));
+                                content.setUser(resp.getString("author"));
+                                content.setCreatedStr(resp.getString("createdOnStr"));
+
+                                //content.setUrl("http://www.ipledge2nigeria.com/index.php?option=com_content&view=article&id=" + content.getId());
+                                String img = resp.getString("displayImage");
+                                content.setImg(img);
+                                content.setIntrotext(resp.getString("intro"));
 
                                 Log.d(TAG, content.getTitle());
                                 news.add(content);
@@ -256,7 +259,7 @@ public class NewsService {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 SharedPreferences prefs = context.getSharedPreferences("NIGERIA_PLEDGE", 0);
 
-                headers.put("Authorization", prefs.getString("NIGERIA_LOGIN_KEY", ""));
+                headers.put("Authorization", prefs.getString("NIGERIA_LOGIN_TOKEN", ""));
                 return headers;
             }
         };
@@ -266,7 +269,7 @@ public class NewsService {
         Log.i(TAG, "Kritika:::" + news);
     }
 
-    public ArrayList<JosContent> getNews() {
+    public Set<JosContent> getNews() {
         Log.i("Kritika1", "News Service news : " + news);
 
         return news;

@@ -1,5 +1,6 @@
 package com.ip2n.mobile.activities;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,6 +8,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,14 +25,14 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.JsonReader;
-import android.util.JsonToken;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
@@ -63,22 +65,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 
 public class NigeriaSendReportActivity extends Activity implements  TextWatcher,LocationListener, View.OnClickListener {
@@ -118,7 +119,7 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
         String questions = getIntent().getStringExtra("questions");
         this.type = getIntent().getStringExtra("type");
         questionList = getQuestionMap(questions);
-        Log.i("Kritika","Question List : "+questionList);
+        Log.i("Kritika", "Question List : " + questionList);
 
     }
 
@@ -192,7 +193,6 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
         });
 
 
-
     }
 
 
@@ -219,10 +219,9 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
             case R.id.action_save:
                 //Save Report here
                 try {
-                    Log.i("Ankitn","SENDING rEPORT");
+                    Log.i("Ankitn", "SENDING rEPORT");
                     sendReport();
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "Report could not be submitted",
                             Toast.LENGTH_LONG).show();
                 }
@@ -236,54 +235,81 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
     private void sendReport() throws JSONException {
         JSONObject obj = moreDetailsListArrayAdapter.getJson();
 
-        Log.d("Ankit523",obj.toString());
+        String questions = obj.toString();
+
+        Log.d("Ankit523", questions);
 
         JSONObject json = new JSONObject();
 
         //put createdOn
-        json.put("createdOn", new Date().getTime());
-        json.put("createdBy", "admin");
+        /*json.put("createdOn", new Date().getTime());
+        json.put("createdBy", "admin");*/
 
         //put incident type
         json.put("type", type.split("\\|")[1]);
 
-        //put reportDate
-        try {
+
+        //TODO : put reportDate
+        /*try {
             //Log.i("Ankitn",dateEditText.getText().toString());
             //Log.i("Ankitn",timeEditText.getText().toString());
             Long reportDt = new SimpleDateFormat("dd/MM/yyyy hh:mm a").parse(dateEditText.getText().toString() + " " + timeEditText.getText().toString()).getTime();
             json.put("reportDate", reportDt);
         } catch (ParseException e) {
             json.put("reportDate", null);
-        }
+        }*/
+
 
         //put state
         String state = stateEditText.getText().toString();
         json.put("state", state);
 
+
         //put govt
         String govt = govtEditText.getText().toString();
         json.put("govt", govt);
 
-        //put description
-        //String description = descEditText.getText().toString();
-        json.put("description", obj.getString("Brief Description"));
+
+        try {
+            //put description
+            //String description = descEditText.getText().toString();
+            Log.i("Kritika","Desc: "+obj.getString("Brief Description"));
+            json.put("description", obj.getString("Brief Description"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        /*JSONObject map = new JSONObject();
+
+        Iterator<String> itr = obj.keys();
+        while (itr.hasNext()) {
+            String nm = itr.next();
+            String val = obj.getString(nm);
+
+            Log.d("AnkitCheck", nm + ":" + val);
+
+
+            map.put(nm, val);
+        }*/
 
         //put questions
-        json.put("questions", obj.toString());
+        json.put("questions", questions);
 
-        Log.i("Ankitn","Json object : "+json);
+        Log.i("Ankitn", "Json object : " + json);
         //call IncidentService create
-        IncidentService.getSingleton().create(json,mContext);
+        IncidentService.getSingleton().create(json, mContext);
 
     }
 
     public class Uploader {
         public void upload() {
 
-            Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            Intent photoPickerIntent = new Intent();
+            photoPickerIntent.setAction(Intent.ACTION_GET_CONTENT);
             photoPickerIntent.setType("image/*");
-            startActivityForResult(photoPickerIntent, 1);
+
+            startActivityForResult(Intent.createChooser(photoPickerIntent, "Select Picture"), 1);
         }
 
 
@@ -296,6 +322,7 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
             Uri selectedImageUri = data.getData();
             String filePath = null;
 
+
             try {
                 // OI FILE Manager
                 String filemanagerstring = selectedImageUri.getPath();
@@ -304,10 +331,15 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
                 String selectedImagePath = getPath(selectedImageUri);
 
                 if (selectedImagePath != null) {
+                    Log.d("Kritika", "selectedImagePath");
+
                     filePath = selectedImagePath;
                 } else if (filemanagerstring != null) {
+                    Log.d("Kritika", "filemanagerstring");
+
                     filePath = filemanagerstring;
                 } else {
+                    Log.d("Kritika", "onActivityResult 1");
                     showErrorDialog();
 
                 }
@@ -315,25 +347,29 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
                 if (filePath != null) {
                     File file = new File(filePath);
                     if (file.exists()) {
+                        Log.i("Kritika", "file exists");
                         IncidentService.getSingleton().uploadFile("incident_image", file, mContext, incidentID);
-                    }
-                    else{
+                    } else {
+                        Log.i("Kritika", "file path nulll!!!");
+
                         showErrorDialog();
                     }
                     // decodeFile(filePath);
                 } else {
-                    Log.i("Kritika","Image Error Bitmap null!!!");
+                    Log.i("Kritika", "Image Error Bitmap null!!!");
 
                     bitmap = null;
                     showErrorDialog();
 
                 }
             } catch (Exception e) {
-                Log.i("Kritika","Image Error!!!");
+                e.printStackTrace();
+                Log.i("Kritika", "Image Error!!!");
                 showErrorDialog();
             }
-        }
-        else{
+        } else {
+            Log.d("Kritika", "onActivityResult 2");
+
             showErrorDialog();
 
         }
@@ -342,8 +378,78 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
     }
 
     public String getPath(Uri uri) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+
+                // TODO handle non-primary volumes
+            }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri)) {
+
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+                return getDataColumn(this, contentUri, null, null);
+            }
+            // MediaProvider
+            else if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[]{
+                        split[1]
+                };
+
+                return getDataColumn(this, contentUri, selection, selectionArgs);
+            }
+
+            // MediaStore (and general)
+            else if ("content".equalsIgnoreCase(uri.getScheme())) {
+
+                // Return the remote address
+                if (isGooglePhotosUri(uri))
+                    return uri.getLastPathSegment();
+
+                return getDataColumn(this, uri, null, null);
+            }
+            // File
+            else if ("file".equalsIgnoreCase(uri.getScheme())) {
+                return uri.getPath();
+            }
+
+            return null;
+        }
+
+
         String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        final String[] imageColumns = { MediaStore.Images.Media.DATA };
+        final String imageOrderBy = null;
+
+        Cursor cursor = getContentResolver().query(uri, imageColumns,
+                MediaStore.Images.Media._ID + "=" + id, null, null);
+
+
+
         if (cursor != null) {
             // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
             // THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
@@ -354,6 +460,61 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
         } else
             return null;
     }
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is ExternalStorageProvider.
+     */
+    public static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is DownloadsProvider.
+     */
+    public static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is MediaProvider.
+     */
+    public static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is Google Photos.
+     */
+    public static boolean isGooglePhotosUri(Uri uri) {
+        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+    public static String getDataColumn(Context context, Uri uri, String selection,
+                                       String[] selectionArgs) {
+
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {
+                column
+        };
+
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
+
 
 
     public static ArrayList<Question> getQuestionMap(String questions) {
@@ -693,6 +854,7 @@ public class NigeriaSendReportActivity extends Activity implements  TextWatcher,
 
         dateEditText.setText(sdf.format(myCalendar.getTime()));
     }
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void showOptions(final String []items , String title, final int id){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogCustom));

@@ -105,7 +105,7 @@ public class IncidentListArrayAdapter extends ArrayAdapter<Incident> {
 
         String fdate = "";
         try {
-            Date dt = new Date(Long.parseLong(objectItem.getCreatedOn()));
+            Date dt = new Date(objectItem.getCreated());
             fdate = new SimpleDateFormat("dd MMM yyyy").format(dt);
             fdate = fdate + " at ";
             fdate = fdate + new SimpleDateFormat("HH:mm").format(dt);
@@ -116,7 +116,7 @@ public class IncidentListArrayAdapter extends ArrayAdapter<Incident> {
 
         dateTime.setText(fdate);
         if(objectItem.getImage()!=null && !objectItem.getImage().trim().isEmpty() && !objectItem.getImage().trim().equals("null")){
-            imageUrl = "http://ipledge2nigeria.com/service/" + "incidents/image/"+objectItem.getId();
+            imageUrl = "http://dev.insodel.com/api/" + "image/"+objectItem.getImage();
         }
         else{
             imageUrl =null;
@@ -178,7 +178,8 @@ public class IncidentListArrayAdapter extends ArrayAdapter<Incident> {
                 connection.connect();
                 InputStream input = connection.getInputStream();
                 BitmapFactory.Options options=new BitmapFactory.Options();
-                options.inSampleSize = 4;
+                //options.inSampleSize = 2;
+                options.inScaled = true;
                 Bitmap b1 = BitmapFactory.decodeStream(input,null,options);
 
                 return b1;

@@ -81,7 +81,7 @@ public class NigeriaLoginActivity extends Activity implements View.OnClickListen
                     mSharedPrefs = getSharedPreferences("NIGERIA_PLEDGE", 0);
                     SharedPreferences.Editor editor = mSharedPrefs.edit();
 
-                    String loginEncoded = new String(Base64.encode((loginEditText.getText().toString() + ":" + passwordEditText.getText().toString()).getBytes(), Base64.NO_WRAP));
+                    String loginEncoded = new String(Base64.encode((loginEditText.getText().toString().trim() + ":" + passwordEditText.getText().toString().trim()).getBytes(), Base64.NO_WRAP));
                     editor.putString("NIGERIA_LOGIN_KEY","Basic " + loginEncoded);
                     editor.commit();
 

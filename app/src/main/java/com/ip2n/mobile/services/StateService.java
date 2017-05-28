@@ -44,7 +44,7 @@ public class StateService {
     public void fetch(final Context context) {
 
 
-        String url = "http://ipledge2nigeria.com/service/nigeriaStates";
+        String url = "http://dev.insodel.com/api/states";
         JsonArrayRequest req = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -66,7 +66,12 @@ public class StateService {
 
                                 String id = resp.getString("id");
                                 String name = resp.getString("name");
-                                String currGovt = resp.getString("currGovt");
+                                String currGovt = resp.getString("capital");
+
+                                if(id.equals("null")|| name.equals("null") || currGovt.equals("null")){
+                                    continue;
+                                }
+
                                 JSONArray jsonArray = resp.getJSONArray("govts");
 
                                 ArrayList<String> govts = new ArrayList<String>();
@@ -119,7 +124,7 @@ public class StateService {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 SharedPreferences prefs = context.getSharedPreferences("NIGERIA_PLEDGE", 0);
 
-                headers.put("Authorization", prefs.getString("NIGERIA_LOGIN_KEY", ""));
+                headers.put("Authorization", prefs.getString("NIGERIA_LOGIN_TOKEN", ""));
                 return headers;
             }
         };

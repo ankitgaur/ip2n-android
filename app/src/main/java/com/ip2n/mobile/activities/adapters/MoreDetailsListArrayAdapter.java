@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -83,6 +85,7 @@ public class MoreDetailsListArrayAdapter extends ArrayAdapter<Question> implemen
 
         Log.d("Ankit521",""+questionArrayList.get(position));
         String question = questionArrayList.get(position).getQuestion();
+        Log.i("Kritika","Question: "+question);
         answerOptions = questionArrayList.get(position).getOptions();
 
 
@@ -99,17 +102,34 @@ public class MoreDetailsListArrayAdapter extends ArrayAdapter<Question> implemen
             convertView.findViewById(R.id.question_edittext_layout).setVisibility(View.VISIBLE);
             TextView questions = (TextView) convertView.findViewById(R.id.question_textview);
             questions.setText(question);
-            EditText et = (EditText)convertView.findViewById(R.id.answer_edittext);
+            final EditText et = (EditText)convertView.findViewById(R.id.answer_edittext);
             et.setTag(position);
 
-            et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                @Override
+//                public void onFocusChange(View v, boolean hasFocus) {
+//                    if(!hasFocus) {
+//                        EditText vet = (EditText)v;
+//                        int key = (int) vet.getTag();
+//                        ansmap.put(""+key,vet.getText().toString());
+//                    }
+//                }
+//            });
+            et.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if(!hasFocus) {
-                        EditText vet = (EditText)v;
-                        int key = (int) vet.getTag();
-                        ansmap.put(""+key,vet.getText().toString());
-                    }
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    int key = (int) et.getTag();
+                    ansmap.put(""+key,et.getText().toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
                 }
             });
 

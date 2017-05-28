@@ -27,7 +27,7 @@ public class ImageLoadTask extends AsyncTask<Void, Void, Void> {
             Log.i("aimg", "loading image " + incident.getImage());
 
             if(incident.getImage()!=null && !incident.getImage().trim().isEmpty() && !incident.getImage().trim().equals("null")){
-                String imageUrl = "http://ipledge2nigeria.com/service/" + "incidents/image/"+incident.getId();
+                String imageUrl = "http://dev.insodel.com/api/" + "incidents/image/"+incident.getId();
                 //SharedPreferences prefs = mContext.getSharedPreferences("NIGERIA_PLEDGE", 0);
                 URL url = new URL(imageUrl);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
